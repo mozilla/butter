@@ -3,6 +3,10 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
   return function( butter, options ){
 
+    var make = Make({
+      apiURL: "http://mighty-harbor-6211.herokuapp.com/"
+    });
+
     options = options || {};
 
     var TOOLTIP_NAME = "name-error-header-tooltip";
@@ -10,7 +14,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     var _this = this,
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
+        _tutorialButtonContainer = _rootElement.querySelector( "#butter-tutorial-container" ),
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
@@ -20,10 +24,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
-        _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
-        _webmakerNav,
         _toolTip;
 
     // create a tooltip for the plrojectName element
@@ -37,10 +39,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     _this.element = _rootElement;
 
     ToolTip.apply( _projectTitle );
-
-    _tabzilla.addEventListener( "click", function() {
-      document.body.classList.toggle( "tabzilla-open" );
-    }, false );
 
     function saveProject() {
       if ( !butter.cornfield.authenticated() ) {
@@ -209,22 +207,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dialog.open();
     }
 
-    _webmakerNav = new WebmakerBar({
-      container: _webmakerNavBar,
-      onLogin: _userData.authenticationRequired,
-      onLogout: _userData.logout,
-      feedbackCallback: feedbackCallback
-    });
-
-
-    function onLogin() {
-      _webmakerNav.views.login( butter.cornfield.username() );
-    }
-
-    butter.listen( "autologinsucceeded", onLogin, false );
-    butter.listen( "authenticated", onLogin, false );
-    butter.listen( "logout", _webmakerNav.views.logout, false );
-
     function destroyToolTip() {
       if ( _noProjectNameToolTip && !_noProjectNameToolTip.destroyed ) {
         _projectTitle.removeEventListener( "mouseover", destroyToolTip, false );
@@ -331,6 +313,114 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     });
 
     butter.listen( "ready", function() {
+      var tutorialId,
+          url;
+      if ( butter.project.id >= 0 || butter.project.remixedFrom >= 0) {
+        if ( butter.project.id >= 0 ) {
+          tutorialId = butter.project.id;
+        } else if ( butter.project.remixedFrom >= 0 ) {
+          tutorialId = butter.project.remixedFrom;
+        }
+
+        // TODO: Figure out what this URL is going to be.
+        url = "http://peaceful-basin-4499.herokuapp.com/v/" + tutorialId.toString( 36 ) + ".html";
+        make.tags("tutorial:" + url).then(function(err, results) {
+          var previousButton = _tutorialButtonContainer.querySelector( ".previous-tutorial-button" ),
+              nextButton = _tutorialButtonContainer.querySelector( ".next-tutorial-button" ),
+              tutorialView = document.createElement("div"),
+              iframeCover = document.createElement("div"),
+              iframe = document.createElement("iframe"),
+              closeButton = document.createElement("div"),
+              viewTitle = document.createElement("div"),
+              tutorials = [],
+              index = 0,
+              container = _tutorialButtonContainer.querySelector( ".tutorial-list" );
+
+          if (err) {
+            return;
+          }
+
+          if ( results.hits.length ) {
+
+            tutorialView.classList.add( "tutorial-view" );
+            iframeCover.classList.add( "tutorial-iframe-cover" );
+
+            var onCoverMouseUp = function() {
+              iframeCover.style.display = "none";
+              tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
+            };
+
+            var onCoverMouseDown = function() {
+              iframeCover.style.display = "block";
+              tutorialView.removeEventListener("mousedown", onCoverMouseDown, false);
+              document.addEventListener("mouseup", onCoverMouseUp, false);
+            };
+
+            tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
+
+            closeButton.classList.add( "tutorial-close-button" );
+            iframe.classList.add( "tutorial-iframe" );
+            viewTitle.classList.add("tutorial-view-title");
+
+            closeButton.innerHTML = "X";
+            closeButton.userSelect = "none";
+            tutorialView.appendChild(iframe);
+            tutorialView.appendChild(iframeCover);
+            tutorialView.appendChild(closeButton);
+            tutorialView.appendChild(viewTitle);
+            document.body.appendChild( tutorialView );
+
+            closeButton.addEventListener("click", function() {
+              tutorialView.style.display = "none";
+            }, false);
+
+            $(tutorialView).draggable({cancel: "iframe"});
+            $(tutorialView).resizable();
+
+            for ( var i = 0; i < results.hits.length; i++ ) {
+              var title = document.createElement("div");
+              tutorials.push({
+                element: title,
+                data: results.hits[i]
+              });
+              title.addEventListener("click", function() {
+                iframe.src = tutorials[index].data.url;
+                viewTitle.innerHTML = "Tutorial: " + tutorials[index].data.title;
+                tutorialView.style.display = "block";
+              }, false);
+              title.style.display = "none";
+              title.innerHTML = "Tutorial: " + results.hits[i].title;
+              container.appendChild(title);
+            }
+            if ( results.hits.length > 1 ) {
+              nextButton.style.visibility = "visible";
+            }
+            tutorials[0].element.style.display = "block";
+            previousButton.addEventListener("click", function() {
+              if (index > 0) {
+                tutorials[index].element.style.display="none";
+                index--;
+                tutorials[index].element.style.display="block";
+                nextButton.style.visibility = "visible";
+                if ( index === 0 ) {
+                  previousButton.style.visibility = "hidden";
+                }
+              }
+            }, false);
+            nextButton.addEventListener("click", function() {
+              if (index+1 < tutorials.length) {
+                tutorials[index].element.style.display="none";
+                index++;
+                tutorials[index].element.style.display="block";
+                previousButton.style.visibility = "visible";
+                if ( index+1 === tutorials.length ) {
+                  nextButton.style.visibility = "hidden";
+                }
+              }
+            }, false);
+          }
+        });
+      }
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
       }

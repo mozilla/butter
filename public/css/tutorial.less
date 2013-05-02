@@ -1,0 +1,82 @@
+.tutorial-list {
+  float: left;
+}
+
+.previous-tutorial-button {
+  visibility: hidden;
+  background-image: url(/resources/icons/glyphiconshalflings-alt.png);
+  float: left;
+  height: 14px;
+  width: 14px;
+  background-position: -288px -120px;
+}
+
+.next-tutorial-button {
+  visibility: hidden;
+  background-image: url(/resources/icons/glyphiconshalflings-alt.png);
+  float: left;
+  height: 14px;
+  width: 14px;
+  background-position: -313px -120px;
+  margin-top: 14px;
+  margin-left: -14px;
+  margin-right: 8px;
+}
+
+.next-tutorial-button:hover {
+  background-image: url(/resources/icons/glyphiconshalflings-grey.png);
+}
+
+.previous-tutorial-button:hover {
+  background-image: url(/resources/icons/glyphiconshalflings-grey.png);
+}
+
+.tutorial-view {
+  position: relative;
+  display: none;
+  top: 0;
+  cursor: move;
+  left: 0;
+  width: 500px;
+  height: 500px;
+  z-index: 100000011;
+  background-color: white;
+  border: 1px solid #aaaaaa;
+  padding: 25px 10px 10px 10px;
+  box-shadow: 0 0 0 1px #cccccc, 0 25px 5px -20px rgba(0, 0, 0, 0.5)
+}
+
+.tutorial-view-title {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: normal;
+  color: rgb(85, 85, 85);
+  font-size: 14px;
+}
+
+.tutorial-iframe-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.tutorial-close-button {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  margin-right: 10px;
+  margin-top: 5px;
+  color: black;
+}
+
+.tutorial-iframe {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #aaaaaa;
+}
