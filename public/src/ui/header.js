@@ -331,6 +331,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
               iframeCover = document.createElement("div"),
               iframe = document.createElement("iframe"),
               closeButton = document.createElement("div"),
+              viewTitle = document.createElement("div"),
               tutorials = [],
               index = 0,
               container = _tutorialButtonContainer.querySelector( ".tutorial-list" );
@@ -359,12 +360,14 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
             closeButton.classList.add( "tutorial-close-button" );
             iframe.classList.add( "tutorial-iframe" );
+            viewTitle.classList.add("tutorial-view-title");
 
             closeButton.innerHTML = "X";
             closeButton.userSelect = "none";
             tutorialView.appendChild(iframe);
             tutorialView.appendChild(iframeCover);
             tutorialView.appendChild(closeButton);
+            tutorialView.appendChild(viewTitle);
             document.body.appendChild( tutorialView );
 
             closeButton.addEventListener("click", function() {
@@ -382,6 +385,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
               });
               title.addEventListener("click", function() {
                 iframe.src = tutorials[index].data.url;
+                viewTitle.innerHTML = "Tutorial: " + tutorials[index].data.title;
                 tutorialView.style.display = "block";
               }, false);
               title.style.display = "none";

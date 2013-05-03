@@ -35,6 +35,7 @@
   position: relative;
   display: none;
   top: 0;
+  cursor: move;
   left: 0;
   width: 500px;
   height: 500px;
@@ -42,6 +43,17 @@
   background-color: white;
   border: 1px solid #aaaaaa;
   padding: 25px 10px 10px 10px;
+  box-shadow: 0 0 0 1px #cccccc, 0 25px 5px -20px rgba(0, 0, 0, 0.5)
+}
+
+.tutorial-view-title {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: normal;
+  color: rgb(85, 85, 85);
+  font-size: 14px;
 }
 
 .tutorial-iframe-cover {
@@ -55,6 +67,7 @@
 
 .tutorial-close-button {
   position: absolute;
+  cursor: pointer;
   top: 0;
   right: 0;
   margin-right: 10px;
