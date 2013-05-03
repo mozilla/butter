@@ -388,12 +388,19 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
               title.innerHTML = "Tutorial: " + results.hits[i].title;
               container.appendChild(title);
             }
+            if ( results.hits.length > 1 ) {
+              nextButton.style.visibility = "visible";
+            }
             tutorials[0].element.style.display = "block";
             previousButton.addEventListener("click", function() {
               if (index > 0) {
                 tutorials[index].element.style.display="none";
                 index--;
                 tutorials[index].element.style.display="block";
+                nextButton.style.visibility = "visible";
+                if ( index === 0 ) {
+                  previousButton.style.visibility = "hidden";
+                }
               }
             }, false);
             nextButton.addEventListener("click", function() {
@@ -401,6 +408,10 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
                 tutorials[index].element.style.display="none";
                 index++;
                 tutorials[index].element.style.display="block";
+                previousButton.style.visibility = "visible";
+                if ( index+1 === tutorials.length ) {
+                  nextButton.style.visibility = "hidden";
+                }
               }
             }, false);
           }
