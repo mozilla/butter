@@ -366,16 +366,17 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
             tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
 
+            closeButton.classList.add( "icon" );
+            closeButton.classList.add( "icon-x" );
             closeButton.classList.add( "tutorial-close-button" );
             iframe.classList.add( "tutorial-iframe" );
             viewTitle.classList.add("tutorial-view-title");
 
-            closeButton.innerHTML = "X";
             closeButton.userSelect = "none";
+            tutorialView.appendChild(viewTitle);
             tutorialView.appendChild(iframe);
             tutorialView.appendChild(iframeCover);
             tutorialView.appendChild(closeButton);
-            tutorialView.appendChild(viewTitle);
             document.body.appendChild( tutorialView );
 
             closeButton.addEventListener("click", function() {
