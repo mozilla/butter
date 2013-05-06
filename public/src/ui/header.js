@@ -340,6 +340,14 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
             return;
           }
 
+          // Faking it with kittens
+          if(  window.location.search.match( "forceTutorial" ) && !results.hits.length ) {
+            results.hits.push({
+              title: "This is a fake tutorial",
+              url: "http://kittenpile.com/"
+            });
+          }
+
           if ( results.hits.length ) {
 
             tutorialView.classList.add( "tutorial-view" );
