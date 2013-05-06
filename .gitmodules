@@ -3,4 +3,4 @@
 	url = git://github.com/mozilla/popcorn-js.git
 [submodule "public/external/MakeAPI"]
 	path = public/external/MakeAPI
-	url = git@github.com:mozilla/MakeAPI.git
+	url = git://github.com/mozilla/MakeAPI.git
