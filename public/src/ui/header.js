@@ -4,7 +4,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
   return function( butter, options ){
 
     var make = Make({
-      apiURL: "http://mighty-harbor-6211.herokuapp.com/"
+      apiURL: "http://makeapi.mofostaging.net"
     });
 
     options = options || {};
@@ -313,39 +313,29 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     });
 
     butter.listen( "ready", function() {
-      var tutorialId,
+      var tutorialUrl,
           url;
       if ( butter.project.id >= 0 || butter.project.remixedFrom >= 0) {
         if ( butter.project.id >= 0 ) {
-          tutorialId = butter.project.id;
+          tutorialUrl = butter.project.publishUrl;
         } else if ( butter.project.remixedFrom >= 0 ) {
-          tutorialId = butter.project.remixedFrom;
+          tutorialUrl = butter.project.remixUrl;
         }
 
-        // TODO: Figure out what this URL is going to be.
-        url = "http://peaceful-basin-4499.herokuapp.com/v/" + tutorialId.toString( 36 ) + ".html";
-        make.tags("tutorial:" + url).then(function(err, results) {
+        make.tags( "tutorial:" + tutorialUrl ).then( function( err, results ) {
           var previousButton = _tutorialButtonContainer.querySelector( ".previous-tutorial-button" ),
               nextButton = _tutorialButtonContainer.querySelector( ".next-tutorial-button" ),
-              tutorialView = document.createElement("div"),
-              iframeCover = document.createElement("div"),
-              iframe = document.createElement("iframe"),
-              closeButton = document.createElement("div"),
-              viewTitle = document.createElement("div"),
+              tutorialView = document.createElement( "div" ),
+              iframeCover = document.createElement( "div" ),
+              iframe = document.createElement( "iframe" ),
+              closeButton = document.createElement( "div" ),
+              viewTitle = document.createElement( "div" ),
               tutorials = [],
               index = 0,
               container = _tutorialButtonContainer.querySelector( ".tutorial-list" );
 
-          if (err) {
+          if ( err ) {
             return;
-          }
-
-          // Faking it with kittens
-          if(  window.location.search.match( "forceTutorial" ) && !results.hits.length ) {
-            results.hits.push({
-              title: "This is a fake tutorial",
-              url: "http://kittenpile.com/"
-            });
           }
 
           if ( results.hits.length ) {
@@ -355,73 +345,76 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
             var onCoverMouseUp = function() {
               iframeCover.style.display = "none";
-              tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
+              tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
             };
 
             var onCoverMouseDown = function() {
               iframeCover.style.display = "block";
-              tutorialView.removeEventListener("mousedown", onCoverMouseDown, false);
-              document.addEventListener("mouseup", onCoverMouseUp, false);
+              tutorialView.removeEventListener( "mousedown", onCoverMouseDown, false );
+              document.addEventListener( "mouseup", onCoverMouseUp, false );
             };
 
-            tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
+            tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
 
+            closeButton.classList.add( "icon" );
+            closeButton.classList.add( "icon-x" );
             closeButton.classList.add( "tutorial-close-button" );
             iframe.classList.add( "tutorial-iframe" );
-            viewTitle.classList.add("tutorial-view-title");
+            viewTitle.classList.add( "tutorial-view-title" );
 
-            closeButton.innerHTML = "X";
             closeButton.userSelect = "none";
-            tutorialView.appendChild(iframe);
-            tutorialView.appendChild(iframeCover);
-            tutorialView.appendChild(closeButton);
-            tutorialView.appendChild(viewTitle);
+            tutorialView.appendChild( viewTitle );
+            tutorialView.appendChild( iframe );
+            tutorialView.appendChild( iframeCover );
+            tutorialView.appendChild( closeButton );
             document.body.appendChild( tutorialView );
 
-            closeButton.addEventListener("click", function() {
+            closeButton.addEventListener( "click", function() {
               tutorialView.style.display = "none";
-            }, false);
+            }, false );
 
-            $(tutorialView).draggable({cancel: "iframe"});
+            $(tutorialView).draggable({
+              cancel: "iframe"
+            });
             $(tutorialView).resizable();
 
             for ( var i = 0; i < results.hits.length; i++ ) {
-              var title = document.createElement("div");
+              var title = document.createElement( "div" );
               tutorials.push({
                 element: title,
-                data: results.hits[i]
+                data: results.hits[ i ]
               });
-              title.addEventListener("click", function() {
-                iframe.src = tutorials[index].data.url;
-                viewTitle.innerHTML = "Tutorial: " + tutorials[index].data.title;
+              title.addEventListener( "click", function() {
+                iframe.src = tutorials[ index ].data.url;
+                viewTitle.innerHTML = "Tutorial: " + tutorials[ index ].data.title;
                 tutorialView.style.display = "block";
-              }, false);
+              }, false );
               title.style.display = "none";
-              title.innerHTML = "Tutorial: " + results.hits[i].title;
-              container.appendChild(title);
+              title.innerHTML = "Tutorial: " + results.hits[ i ].title;
+              container.appendChild( title );
             }
             if ( results.hits.length > 1 ) {
               nextButton.style.visibility = "visible";
             }
             tutorials[0].element.style.display = "block";
-            previousButton.addEventListener("click", function() {
-              if (index > 0) {
-                tutorials[index].element.style.display="none";
+            previousButton.addEventListener( "click", function() {
+              if ( index > 0) {
+                tutorials[ index ].element.style.display = "none";
                 index--;
-                tutorials[index].element.style.display="block";
+                tutorials[ index ].element.style.display = "block";
                 nextButton.style.visibility = "visible";
                 if ( index === 0 ) {
                   previousButton.style.visibility = "hidden";
                 }
               }
-            }, false);
-            nextButton.addEventListener("click", function() {
-              if (index+1 < tutorials.length) {
-                tutorials[index].element.style.display="none";
+            }, false );
+            nextButton.addEventListener( "click", function() {
+              if ( index + 1 < tutorials.length ) {
+                tutorials[ index ].element.style.display = "none";
                 index++;
-                tutorials[index].element.style.display="block";
+                tutorials[ index ].element.style.display = "block";
                 previousButton.style.visibility = "visible";
-                if ( index+1 === tutorials.length ) {
+                if ( index + 1 === tutorials.length ) {
                   nextButton.style.visibility = "hidden";
                 }
               }

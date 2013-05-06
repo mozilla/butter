@@ -11,7 +11,7 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
 
     var _this = this,
         _id, _name, _template, _author, _description, _dataObject,
-        _publishUrl, _iframeUrl, _remixedFrom,
+        _publishUrl, _iframeUrl, _remixedFrom, _remixUrl,
 
         // Whether or not a save to server is required (project data has changed)
         _isDirty = false,
@@ -163,6 +163,13 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         enumerable: true
       },
 
+      "remixUrl": {
+        get: function() {
+          return _remixUrl;
+        },
+        enumerable: true
+      },
+
       "iframeUrl": {
         get: function() {
           return _iframeUrl;
@@ -264,6 +271,10 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
 
       if ( json.remixedFrom ) {
         _remixedFrom = json.remixedFrom;
+      }
+
+      if ( json.remixUrl ) {
+        _remixUrl = json.remixUrl;
       }
 
       targets = json.targets;
