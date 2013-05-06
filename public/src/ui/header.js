@@ -4,7 +4,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
   return function( butter, options ){
 
     var make = Make({
-      apiURL: "http://localhost:6001"
+      apiURL: "http://mighty-harbor-6211.herokuapp.com/"
     });
 
     options = options || {};
