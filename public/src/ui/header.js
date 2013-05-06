@@ -323,7 +323,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         }
 
         // TODO: Figure out what this URL is going to be.
-        url = "http://localhost:8888/v/" + tutorialId.toString( 36 ) + ".html";
+        url = "http://peaceful-basin-4499.herokuapp.com/v/" + tutorialId.toString( 36 ) + ".html";
         make.tags("tutorial:" + url).then(function(err, results) {
           var previousButton = _tutorialButtonContainer.querySelector( ".previous-tutorial-button" ),
               nextButton = _tutorialButtonContainer.querySelector( ".next-tutorial-button" ),
