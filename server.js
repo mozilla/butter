@@ -11,8 +11,8 @@ var express = require('express'),
     lessMiddleware = require('less-middleware'),
     requirejsMiddleware = require( 'requirejs-middleware' ),
     config = require( './lib/config' ),
-    Project = require( './lib/project' )( config.database ),
-    filter = require( './lib/filter' )( Project.isDBOnline ),
+    Project,
+    filter,
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
     metrics,
@@ -126,8 +126,12 @@ app.configure( function() {
 
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: config.dirs.embedHostname ? config.dirs.embedHostname : APP_HOSTNAME,
-    EMBED_SUFFIX: '_'
+    EMBED_SUFFIX: '_',
+    APP_HOSTNAME: APP_HOSTNAME
   }, stores );
+
+  Project = require( './lib/project' )( config.database, null, utils );
+  filter = require( './lib/filter' )( Project.isDBOnline );
 });
 
 require( 'express-persona' )( app, {
@@ -304,7 +308,8 @@ app.post( '/api/publish/:id',
                            description: project.description,
                            embedShellSrc: publishUrl,
                            embedSrc: iframeUrl,
-                           baseHref: APP_HOSTNAME
+                           baseHref: APP_HOSTNAME,
+                           thumbnail: project.thumbnail
                          },
                          finished );
       }
@@ -326,7 +331,8 @@ app.post( '/api/publish/:id',
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,
                     externalAssets: externalAssetsString,
-                    popcorn: popcornString
+                    popcorn: popcornString,
+                    thumbnail: project.thumbnail
                   },
                   publishEmbedShell );
 

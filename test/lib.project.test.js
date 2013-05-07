@@ -8,8 +8,16 @@ var test = require( "tap" ).test,
       email: mockEmail,
       name: "Test User",
       author: "Test User",
-      template: "basic"
+      template: "basic",
+      thumbnail: "http://localhost:8888/resources/icons/fb-logo.png"
     },
+    constants = {
+      EMBED_HOSTNAME: "http://localhost:8888",
+      EMBED_SUFFIX: "_",
+      APP_HOSTNAME: "http://localhost:8888"
+    },
+    mockStore = require( "./mock.store" ),
+    utils = require( "../lib/utils" )( constants, mockStore ),
     id;
 
 test( "sqlite db setup with incorrect pool params", function( t ) {
@@ -29,7 +37,7 @@ test( "sqlite db setup with incorrect pool params", function( t ) {
     t.ok( !err, "User created with sqlite db and ignored pool param" );
     t.end();
   });
-});
+}, utils );
 
 test( "sqlite db setup", function( t ) {
   project = require( "../lib/project" )({
@@ -42,7 +50,7 @@ test( "sqlite db setup", function( t ) {
   }, function( err ) {
     t.ok( !err, "User created with sqlite db" );
     t.end();
-  });
+  }, utils );
 });
 
 test( "create valid parameters", function( t ) {
@@ -225,7 +233,8 @@ test( "update valid parameters", function( t ) {
         },
         name: "Test Userd",
         author: "Test Userd",
-        template: "advanced"
+        template: "advanced",
+        thumbnail: "http://localhost:8888/resources/icons/fb-logo.png"
       },
       mockCallback = function( err, project ) {
         t.equal( project.data, JSON.stringify( updateData.data ), "Properly updated Data of Project" );
