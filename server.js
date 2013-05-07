@@ -126,10 +126,11 @@ app.configure( function() {
 
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: config.dirs.embedHostname ? config.dirs.embedHostname : APP_HOSTNAME,
-    EMBED_SUFFIX: '_'
+    EMBED_SUFFIX: '_',
+    APP_HOSTNAME: APP_HOSTNAME
   }, stores );
 
-  Project = require( './lib/project' )( config.database );
+  Project = require( './lib/project' )( config.database, null, utils );
   filter = require( './lib/filter' )( Project.isDBOnline );
 });
 
