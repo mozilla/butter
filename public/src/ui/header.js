@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
 
   return function( butter, options ){
 
@@ -14,7 +14,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     var _this = this,
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _tutorialButtonContainer = _rootElement.querySelector( "#butter-tutorial-container" ),
+        _tutorialButtonContainer = _rootElement.querySelector( ".butter-tutorial-container" ),
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
@@ -322,16 +322,13 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         }
 
         make.tags( "tutorial:" + tutorialUrl ).then( function( err, results ) {
-          var previousButton = _tutorialButtonContainer.querySelector( ".previous-tutorial-button" ),
-              nextButton = _tutorialButtonContainer.querySelector( ".next-tutorial-button" ),
-              tutorialView = document.createElement( "div" ),
+          var tutorialView = document.createElement( "div" ),
               iframeCover = document.createElement( "div" ),
               iframe = document.createElement( "iframe" ),
               closeButton = document.createElement( "div" ),
               viewTitle = document.createElement( "div" ),
-              tutorials = [],
-              index = 0,
-              container = _tutorialButtonContainer.querySelector( ".tutorial-list" );
+              tutorialTemplate = Lang.domFragment( TUTORIAL_LIST_TEMPLATE, ".tutorial-template" ),
+              tutorialList = tutorialTemplate.querySelector( ".tutorial-list" );
 
           if ( err ) {
             return;
@@ -339,6 +336,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
           if ( results.hits.length ) {
 
+            _tutorialButtonContainer.appendChild( tutorialTemplate );
             tutorialView.classList.add( "tutorial-view" );
             iframeCover.classList.add( "tutorial-iframe-cover" );
 
@@ -351,6 +349,18 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
               iframeCover.style.display = "block";
               tutorialView.removeEventListener( "mousedown", onCoverMouseDown, false );
               document.addEventListener( "mouseup", onCoverMouseUp, false );
+            };
+
+            var createTutorialItem = function( item ) {
+              var tutorialElement = document.createElement( "div" );
+              tutorialElement.classList.add( "tutorial-list-item" );
+              tutorialElement.addEventListener( "click", function() {
+                iframe.src = item.url;
+                viewTitle.innerHTML = "Tutorial: " + item.title;
+                tutorialView.style.opacity = 1;
+              }, false );
+              tutorialElement.innerHTML = item.title;
+              tutorialList.appendChild( tutorialElement );
             };
 
             tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
@@ -369,55 +379,17 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
             document.body.appendChild( tutorialView );
 
             closeButton.addEventListener( "click", function() {
-              tutorialView.style.display = "none";
+              tutorialView.style.opacity = 0;
             }, false );
 
-            $(tutorialView).draggable({
+            $( tutorialView ).draggable({
               cancel: "iframe"
             });
-            $(tutorialView).resizable();
+            $( tutorialView ).resizable();
 
             for ( var i = 0; i < results.hits.length; i++ ) {
-              var title = document.createElement( "div" );
-              tutorials.push({
-                element: title,
-                data: results.hits[ i ]
-              });
-              title.addEventListener( "click", function() {
-                iframe.src = tutorials[ index ].data.url;
-                viewTitle.innerHTML = "Tutorial: " + tutorials[ index ].data.title;
-                tutorialView.style.display = "block";
-              }, false );
-              title.style.display = "none";
-              title.innerHTML = "Tutorial: " + results.hits[ i ].title;
-              container.appendChild( title );
+              createTutorialItem( results.hits[ i ] );
             }
-            if ( results.hits.length > 1 ) {
-              nextButton.style.visibility = "visible";
-            }
-            tutorials[0].element.style.display = "block";
-            previousButton.addEventListener( "click", function() {
-              if ( index > 0) {
-                tutorials[ index ].element.style.display = "none";
-                index--;
-                tutorials[ index ].element.style.display = "block";
-                nextButton.style.visibility = "visible";
-                if ( index === 0 ) {
-                  previousButton.style.visibility = "hidden";
-                }
-              }
-            }, false );
-            nextButton.addEventListener( "click", function() {
-              if ( index + 1 < tutorials.length ) {
-                tutorials[ index ].element.style.display = "none";
-                index++;
-                tutorials[ index ].element.style.display = "block";
-                previousButton.style.visibility = "visible";
-                if ( index + 1 === tutorials.length ) {
-                  nextButton.style.visibility = "hidden";
-                }
-              }
-            }, false);
           }
         });
       }

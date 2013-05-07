@@ -1,39 +1,40 @@
 .tutorial-list {
-  float: left;
+  position: relative;
+  background: none repeat scroll 0% 0% rgb(58, 60, 60);
+  padding: 0 15px;
+  opacity: 0;
+  transition: opacity .35s;
 }
 
-.previous-tutorial-button {
-  visibility: hidden;
-  background-image: url(/resources/icons/glyphiconshalflings-alt.png);
-  float: left;
-  height: 14px;
-  width: 14px;
-  background-position: -288px -120px;
+.tutorial-list:hover {
+  opacity: 1;
 }
 
-.next-tutorial-button {
-  visibility: hidden;
-  background-image: url(/resources/icons/glyphiconshalflings-alt.png);
-  float: left;
-  height: 14px;
-  width: 14px;
-  background-position: -313px -120px;
-  margin-top: 14px;
-  margin-left: -14px;
-  margin-right: 8px;
+.tutorial-list-item {
+  opacity: 0.5;
 }
 
-.next-tutorial-button:hover {
-  background-image: url(/resources/icons/glyphiconshalflings-grey.png);
+.tutorial-list-item:hover {
+  opacity: 1;
 }
 
-.previous-tutorial-button:hover {
-  background-image: url(/resources/icons/glyphiconshalflings-grey.png);
+.butter-tutorial-container:hover .tutorial-list {
+  opacity: 1;
+}
+
+#webmaker-nav {
+  position: relative;
+  z-index: 1;
+}
+
+.butter-tutorial-container.hidden {
+  display: none;
 }
 
 .tutorial-view {
   position: relative;
-  display: none;
+  opacity: 0;
+  transition: opacity .35s;
   top: 0;
   left: 0;
   cursor: move;
@@ -73,7 +74,6 @@
     opacity: 1;
   }
 }
-
 
 .tutorial-iframe {
   width: 100%;
