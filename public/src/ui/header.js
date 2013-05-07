@@ -313,8 +313,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     });
 
     butter.listen( "ready", function() {
-      var tutorialUrl,
-          url;
+      var tutorialUrl;
       if ( butter.project.id >= 0 || butter.project.remixedFrom >= 0) {
         if ( butter.project.id >= 0 ) {
           tutorialUrl = butter.project.publishUrl;
