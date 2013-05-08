@@ -190,38 +190,6 @@ test("create project valid", function(t) {
     });
 });
 
-test("create project with data-uris", function(t) {
-  mockProject.error = false;
-  var mockData = mockProject.generateMockData( 0, [{
-      tracks: [{
-        trackEvents: [{
-          type: "test",
-          popcornOptions: {
-            src: "data:image/png;base64,hilloydalittleslowtonightisntithahahahhaha"
-          }
-        }]
-      }]
-    }]);
-
-  mockData.data = JSON.parse(mockData.data);
-  delete mockData.id;
-
-  request(app)
-    .post("/api/project")
-    .send(mockData)
-    .end(function(err, res) {
-      t.equal(res.statusCode, 200, "status code is 200");
-      t.equal(res.type, "application/json", "response type is json");
-      t.equal(res.body.error, "okay", "status is okay");
-      t.ok(Array.isArray( res.body.imageURLs ) && res.body.imageURLs.length === 1, "imageURLs array returned");
-      t.equal(res.body.imageURLs[0].hash, "9a0d82c0648cbf27c7b2568b2aa7c8025c77771e", "SHA hash is correct");
-      t.ok(res.body.imageURLs[0].url && res.body.imageURLs[0].url.length > 0, "url returned with hash");
-      t.ok(res.body.projectId, "id is present");
-
-      t.end();
-    });
-});
-
 test("update project with error", function(t) {
   mockProject.error = true;
   mockProject.doc = true;
