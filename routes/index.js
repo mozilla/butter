@@ -106,8 +106,10 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
       projectJSON.template = doc.template;
       projectJSON.publishUrl = utils.generatePublishUrl( doc.id );
       projectJSON.iframeUrl = utils.generateIframeUrl( doc.id );
-      projectJSON.remixedFrom = doc.remixedFrom;
-      projectJSON.remixUrl = utils.generateIframeUrl( doc.remixedFrom );
+      if ( doc.remixedFrom || doc.remixedFrom === 0 ) {
+        projectJSON.remixedFrom = doc.remixedFrom;
+        projectJSON.remixUrl = utils.generateIframeUrl( doc.remixedFrom );
+      }
       res.json( projectJSON );
     });
   });

@@ -273,9 +273,7 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         _remixedFrom = json.remixedFrom;
       }
 
-      if ( json.remixUrl ) {
-        _remixUrl = json.remixUrl;
-      }
+      _remixUrl = json.remixUrl;
 
       targets = json.targets;
       if ( targets && Array.isArray( targets ) ) {

@@ -1,13 +1,11 @@
 .tutorial-list {
-  position: relative;
+  position: absolute;
   background: none repeat scroll 0% 0% rgb(58, 60, 60);
   padding: 0 15px;
   opacity: 0;
   transition: opacity .35s;
-}
-
-.tutorial-list:hover {
-  opacity: 1;
+  bottom: 100%;
+  overflow: hidden;
 }
 
 .tutorial-list-item {
@@ -20,6 +18,7 @@
 
 .butter-tutorial-container:hover .tutorial-list {
   opacity: 1;
+  position: relative;
 }
 
 #webmaker-nav {
@@ -33,7 +32,7 @@
 
 .tutorial-view {
   position: relative;
-  opacity: 0;
+  opacity: 1;
   transition: opacity .35s;
   top: 0;
   left: 0;
@@ -45,6 +44,12 @@
   border: 1px solid darken( @baseLightOutline, 10% );
   box-shadow: 0 3px 10px -5px rgba( 0, 0, 0, 0.5 );
   padding: 3em 1em 1em;
+}
+
+.tutorial-view.closed {
+  width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 .tutorial-view-title {

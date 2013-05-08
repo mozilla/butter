@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html","text!layouts/tutorial-view.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, TUTORIAL_VIEW_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
 
   return function( butter, options ){
 
@@ -322,12 +322,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
         }
 
         make.tags( "tutorial:" + tutorialUrl ).then( function( err, results ) {
-          var tutorialView = document.createElement( "div" ),
-              iframeCover = document.createElement( "div" ),
-              iframe = document.createElement( "iframe" ),
-              closeButton = document.createElement( "div" ),
-              viewTitle = document.createElement( "div" ),
+          var tutorialView = Lang.domFragment( TUTORIAL_VIEW_TEMPLATE, ".tutorial-view" ),
               tutorialTemplate = Lang.domFragment( TUTORIAL_LIST_TEMPLATE, ".tutorial-template" ),
+              iframeCover = tutorialView.querySelector( ".tutorial-iframe-cover" ),
+              iframe = tutorialView.querySelector( ".tutorial-iframe" ),
+              closeButton = tutorialView.querySelector( ".tutorial-close-button" ),
+              viewTitle = tutorialView.querySelector( ".tutorial-view-title" ),
               tutorialList = tutorialTemplate.querySelector( ".tutorial-list" );
 
           if ( err ) {
@@ -337,8 +337,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
           if ( results.hits.length ) {
 
             _tutorialButtonContainer.appendChild( tutorialTemplate );
-            tutorialView.classList.add( "tutorial-view" );
-            iframeCover.classList.add( "tutorial-iframe-cover" );
 
             var onCoverMouseUp = function() {
               iframeCover.style.display = "none";
@@ -357,7 +355,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
               tutorialElement.addEventListener( "click", function() {
                 iframe.src = item.url;
                 viewTitle.innerHTML = "Tutorial: " + item.title;
-                tutorialView.style.opacity = 1;
+              tutorialView.classList.remove( "closed" );
               }, false );
               tutorialElement.innerHTML = item.title;
               tutorialList.appendChild( tutorialElement );
@@ -365,21 +363,11 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
 
             tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
 
-            closeButton.classList.add( "icon" );
-            closeButton.classList.add( "icon-x" );
-            closeButton.classList.add( "tutorial-close-button" );
-            iframe.classList.add( "tutorial-iframe" );
-            viewTitle.classList.add( "tutorial-view-title" );
-
             closeButton.userSelect = "none";
-            tutorialView.appendChild( viewTitle );
-            tutorialView.appendChild( iframe );
-            tutorialView.appendChild( iframeCover );
-            tutorialView.appendChild( closeButton );
             document.body.appendChild( tutorialView );
 
             closeButton.addEventListener( "click", function() {
-              tutorialView.style.opacity = 0;
+              tutorialView.classList.add( "closed" );
             }, false );
 
             $( tutorialView ).draggable({
