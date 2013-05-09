@@ -1,473 +1,172 @@
-// *********************************************************
-// Globals
-
-//Path to img folder
-@feedbackIconPath: url( "/resources/feedback-icon.png" );
-
-// SPACING
-@webmakerNavHeight: 29px;
-@padding: 15px;
-@secondaryheight: 50px; // Height of the expanded secondary nav
-@tabzillaOffset: 150px;
-
-// COLORS
-@darkgrey: #3A3C3C;
-@mediumgrey: lighten( @darkgrey, 0 );
-@darkgreyhighlight: lighten( @darkgrey, 10% );
-@lightgrey: #D6D8D7;
-@blue: #3985ED;
-@green: #3FB58E;
-
-//FONTS
-@fontsize: 12px;
-@primaryfontsize: 12px;
-
 /*********************************************************
 * Webmaker nav
 */
+#webmaker-nav {
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  width: 100%;
+}
 .webmaker-nav-container {
-  font-family: "Open Sans", sans-serif;
-  color: #FFF;
-  font-size: @fontsize;
-  border-bottom: 1px solid darken( @darkgrey, 5% );
-  a {
-    color: #FFF;
-    &:hover {
-      color: @green;
-    }
-  }
-  .h3 {
-    color: #FFF;
-    margin: 0;
-    font-weight: 700;
-    font-size: 19px;
-  }
+  height: 29px;
+  background: #3a3c3c;
+  border-bottom: 1px solid #2d2f2f;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
 }
-.webmaker-nav-top {
-  background: @darkgrey;
-  height: @webmakerNavHeight;
-}
+
 .webmaker-nav {
+  height: 29px;
   padding: 0;
   margin: 0;
   list-style: none;
-  line-height: @webmakerNavHeight;
+  line-height: 29px;
   font-size: 1em;
   color: #FFF;
-  > li {
-    padding: 0;
-    margin: 0;
-    float: left;
-    height: 100%;
-  }
-  > li > a,
-  > li > .link {
-    position: relative;
-    display: block;
-    height: 100%;
-    background: @darkgrey;
-    padding: 0 @padding;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    .selectable( none );
-    .transition( top 0.1s ease );
-    // Default state
-    color: fade( #FFF, 50% );
-    // Hover or always-on state
-    &:hover,
-    &.on {
-      color: #FFF;
-    }
-    // Active state
-    &.webmaker-btn-active {
-      color: #FFF;
-      border-bottom-width: 1px;
-      border-top: 1px solid lighten( @darkgrey, 6% );
-      background: @mediumgrey;
-      top: 4px;
-      box-shadow: 0 -6px 0 1px darken( @darkgrey, 5% ),
-        1px -8px 10px -2px darken( @darkgrey, 10% );
-       z-index: 10000;
-    }
-  }
-} //webmaker-nav
+}
 
-// This is the menu that always shows up, like "Projects", "Tools", ...
-.primary {
-  float: left;
-  height: @webmakerNavHeight;
-  > li {
-    border-right: 1px solid lighten( @darkgrey, 5% );
-    border-left: 1px solid darken( @darkgrey, 5% );
-    margin-left: 0;
+.webmaker-nav > li > a {
+  display: block;
+  height: 100%;
+  background: #3a3c3c;
+  padding: 0 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  color: rgb(255, 255, 255);
+  color: rgba(255, 255, 255, 0.5);
+}
 
-    .webmaker-expanded & {
-      border-color: transparent;
-    }
-    &:last-child {
-      border-right-color: transparent;
-    }
-    a {
-      &:hover {
-        background: lighten( @darkgrey, 2% );
-      }
-    }
-  }
+.webmaker-nav > li > a:hover {
+  color: #FFF;
 }
 
 /*********************************************************
-* Feedback
+* Primary menu
 */
-
-.feedback-icon {
-  margin-top: 6px;
+.primary {
   float: left;
-  background: @feedbackIconPath no-repeat;
-  height: 18px;
-  width: 20px;
-  &:hover {
-    background-position: -19px 0;
-  }
 }
-
-.webmaker-feedback-btn {
-  .feedback-label {
-    display: none;
-    padding-left: 5px;
-  }
-  &:hover .feedback-label {
-    display: inline;
-  }
+.primary > li {
+  border-right: 1px solid #474949;
+  border-left: 1px solid #2d2f2f;
+  float: left;
+  height: 100%;
 }
-
+.primary > li:last-child {
+  border-right-color: transparent;
+}
+.primary > li a:hover {
+  background: #3f4141;
+}
 /*********************************************************
 * User/Login Styles
 */
-
-// This is the menu on the right with user info stuff
 .user-info {
   float: right;
-  margin-right: @tabzillaOffset;
-  li {
-    border-right: none;
-  }
+  text-align: right;
 }
 
-.login-join {
-  cursor: pointer;
-  position: relative;
-  .join { //usually login
-    pointer-events: auto;
-    top: 100%;
-    margin-top: 15px;
-    width: 200px;
-    margin-left: -100px;
-    z-index: 100;
-
-    .h3 {
-      color: #555;
-      font-size: 1em;
-      margin: 5px 0
-    }
-    .login {
-      display: inline-block;
-    }
-    .persona-img {
-      width: 40px;
-      height: 40px;
-      position: absolute;
-      top: 43px;
-      left: 4px;
-      background: url( "/resources/icons/persona-logo.png" ) no-repeat;
-      background-size: contain;
-    }
-    .info {
-      text-align: left;
-      margin-left: 40px;
-    }
-  }
-  .login { // usually join
-    color: #FFF;
-    line-height: 22px;
-    top: 3px;
-    display: block;
-    position: relative;
-    background: lighten( @darkgrey, 10% );
-    border: 1px solid #333;
-    box-shadow: inset 0 1px 0 0 lighten( @darkgrey, 25% );
-    padding: 0 12px 0 37px;
-    border-radius: 3px;
-    margin-right: 5px;
-    overflow: hidden;
-    &:after {
-      background: url( "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAPCAYAAAA/I0V3AAAA4klEQVR42o2RWaqEMBRE3YaCiDjPwQGcd9CrysLv4wTyoLFD90dxqbp1EgdPRB7Kskznea6Zn/aPoKoqUUrJOI5m4l2QBfSyLHKep1zXZSae3An1fS/7vst931bGkzuhaZrsLVbGkzuheZ7lOI6HyJ2QUkqv6yrbtv0LT+6E7G0UrfBfP3lZlpoXH4ZBmHgn5Pv+KwxDfqp0XQdgJp6c/RsUBIGOokiSJDE/s21bACbe5Ozp0TdAHMdSFIXUdS1N01C2wpObPT36HifwCJzI0iX29Oh7XP0E3CB9L01TzM+i/wePv4ZE5RtAngAAAABJRU5ErkJggg==" ) 10px center no-repeat;
-      content: "";
-      display: block;
-      width: 31px;
-      position: absolute;
-      bottom: 0;
-      left: -5px;
-      top: 0;
-      z-index: 10;
-    }
-    &:before {
-      content: "";
-      display: block;
-      width: 30px;
-      height: 30px;
-      position: absolute;
-      left: -5px;
-      top: -4px;
-      z-index: 10;
-      background: fade( #FFF, 40% );
-      .transform( rotate( 45deg ) );
-      box-shadow: 1px 0 0 2px fade( #000, 5% );
-    }
-    &:hover {
-      background: lighten( @darkgrey, 15% );
-    }
-  }
+.user {
+  line-height: 29px;
+  margin-right: 20px;
 }
 
-.user-info > .notification-badge > a {
-  display: none;
-  height: 15px;
-  width: 15px;
-  padding: 0;
-  border-radius: 5px;
-  margin-top: 8px;
-  border: 5px solid lighten( @darkgrey, 15% );
-  .box-sizing( border-box );
-  opacity: 0.7;
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.webmaker-nav > .user {
-  position: relative;
-  > a {
-    padding-left: 8px;
-  }
-}
-
-// The user menu
-.tooltip.tooltip-user {
-  background: @darkgrey;
-  border: none;
-  color: #FFF;
-  margin-top: 0;
-  left: 0;
-  right: 0;
-  width: auto;
-  margin-left: 0;
-  padding: 0;
-  text-align: left;
-  border-radius: 0 0 2px 2px;
-  &:after,
-  &:before {
-    display: none;
-  }
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    > li {
-      padding: 5px;
-      padding-left: 10px;
-      border-bottom: 1px solid lighten( @darkgrey, 10% );
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-    > li a {
-      cursor: pointer;
-    }
-  }
-}
-
-/*********************************************************
-* Tabs
-*/
-.webmaker-tabs {
-  height: 0;
-  .webmaker-expanded & {
-    height: auto;
-  }
-}
-.webmaker-tabs,
-.webmaker-tab {
-  background: @mediumgrey;
-}
-.webmaker-tab li > a {
-  background: none;
-}
-
-.webmaker-tab {
-  box-shadow: inset 0 1px 0 0 @darkgreyhighlight,
-    0 -1px 0 0 darken( @darkgrey, 5% );
-}
-
-// This is the menu with subnavigation
-.webmaker-tab {
-  position: relative;
-  width: 100%;
-  color: #FFF;
-  overflow: hidden;
-  li {
-    border-right: none;
-    line-height: @secondaryheight;
-  }
-  li > a {
-    font-size: 1.25em;
-  }
-
-  // Default state
-  height: 0;
-  .transition( height 0.1s ease );
-
-  // Active state
-  &.webmaker-tab-active {
-    height: @secondaryheight;
-  }
-}
-.webmaker-section-icon {
+.user-info > li {
   float: left;
+  border-right: none;
   height: 100%;
-  padding-left: 10px;
+}
+.webmaker-create-user {
+  display: none;
+  padding: 2em 1em;
+  background: #F4F5F5;
+  border-bottom: 1px solid #DDD;
+  color: #555;
+  text-align: center;
 }
 
-// Specific style for first tab
-.tab-webmaker {
-   &.webmaker-tab-active {
-      height: @secondaryheight + 50px;
-   }
-   .tab-inner {
-    height: 100%;
-   }
-   .secondary-info {
-      float: left;
-      width: 450px;
-      padding: 20px;
-      border-left: 1px solid lighten( @darkgrey, 10% );
-      height: 100%;
-      font-size: 15px;
-      line-height: 1.3;
-      .info {
-        margin: 0;
-        font-weight: 400;
-      }
-   }
-   .webmaker-button {
-    float: left;
-    padding-top: 20px;
-    a:hover {
-      color: #FFF;
-    }
-   }
-   .block {
-    float: left;
-    display: block;
-    color: #EEE;
-    text-decoration: none;
-    width: 250px;
-    padding-right: 20px;
-    border-left: 1px solid lighten( @darkgrey, 10% );
-    height: 100%;
+.webmaker-create-user > form {
+  display: inline-block;
+  text-align: left;
+}
+/*********************************************************
+* Helpers
+*/
+.webmaker-create-user .row {
+  margin: 1em 0;
+}
 
-    &:hover {
-      color: #FFF;
-    }
+.webmaker-create-user .inline {
+  display: inline-block;
+}
 
-    h4 {
-      font-size: 16px;
-      line-height: 1;
-      margin: 24px 0 6px 0;
-    }
-
-    .info {
-      margin: 0;
-      line-height: 1.4;
-    }
-  }
- img {
-    float: left;
-    margin: 12px 5px;
-    opacity: 0.8;
-    &.logo {
-      margin: 11px 0 0 15px;
-    }
-  }
-  .block:hover img,
-  .logo {
-    opacity: 1;
-    margin-top: 11px;
-  }
-  .webmaker-slogan {
-    width: 420px;
-    padding: 20px;
-    margin: 0;
-    font-size: 1.6em;
-    line-height: 1.4;
-    float: left;
-    padding-right: 30px;
-    .box-sizing( border-box );
-  }
+.webmaker-create-user .visually-hidden {
+  display: block;
+  height: 1px;
+  overflow: hidden;
+  left: -99999em;
 }
 
 
 /*********************************************************
-* Tooltips + Buttons
+* Title
 */
-
-//Btn
-.btn {
-  display: inline-block;
-  background: #EEE;
-  padding: 4px 8px;
-  border-radius: 2px;
-  &:hover {
-    color: #FFF;
-    background: @green;
-  }
+.webmaker-create-user legend {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin: 0;
 }
 
-// The user menu
-.butter-tooltip.tooltip-user {
-  background: @darkgrey;
-  border: none;
+/*********************************************************
+* Display subdomain
+*/
+.display-subdomain-container {
+  font-size: 1.5em;
+}
+.display-subdomain-container,
+.display-subdomain-input {
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+}
+.display-subdomain-input {
+  font-size: 1em;
+  padding: 0.5em;
+  width: 16em;
+  border: 1px solid #3FB58E;
+  border-radius: 2px;
+  color: #3FB58E;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.display-subdomain-input:focus {
+  outline: none;
+  box-shadow: 0 2px 3px -3px #3FB58E;
+}
+
+/*********************************************************
+* Buttons, iframe
+*/
+.create-user-submit {
   color: #FFF;
-  margin-top: 0;
-  left: 0;
-  right: 0;
-  width: auto;
-  margin-left: 0;
-  padding: 0;
-  text-align: left;
-  border-radius: 0 0 2px 2px;
-  pointer-events: auto;
-  box-shadow: 0 3px 5px rgba( 0, 0, 0, 0.4 );
-  &:after,
-  &:before {
-    display: none;
-  }
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    > li {
-      padding: 10px;
-      padding-left: 10px;
-      border-bottom: 1px solid lighten( @darkgrey, 10% );
-      box-shadow: inset 0 -1px 0 0 fade( #000, 20% );
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-    > li a {
-      cursor: pointer;
-      text-decoration: none;
-    }
-  }
+  border: 1px solid #519369;
+  background: #3FB58E;
+  font-size: 1.2em;
+  padding: 1em;
+  border-radius: 2px;
+}
+
+.create-user-submit:hover {
+  background: #79b790;
+}
+
+#SSO {
+  height: 30px;
+  width: 115px;
+  background: transparent;
+  color: #fff;
+  border: none;
+  margin-top: 3px;
 }

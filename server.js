@@ -386,6 +386,10 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
 
 app.get( '/healthcheck', routes.api.healthcheck );
 
+app.get( '/external/make-api.js', function( req, res ) {
+  res.sendfile( "node_modules/makeapi/public/js/make-api.js" );
+});
+
 app.listen( config.PORT, function() {
   console.log( 'HTTP Server started on ' + APP_HOSTNAME );
   console.log( 'Press Ctrl+C to stop' );

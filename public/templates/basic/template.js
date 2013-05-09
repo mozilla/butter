@@ -8,6 +8,7 @@
       config: "config.json",
       ready: function( butter ) {
 
+        EditorHelper.init( butter );
         butter.listen( "mediaready", function mediaReady() {
           butter.unlisten( "mediaready", mediaReady );
           document.querySelector( "#embed-wrapper" ).classList.remove( "faded" );

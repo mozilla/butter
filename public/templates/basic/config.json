@@ -4,8 +4,7 @@
   "baseDir": "../../",
   "savedDataUrl": "saved-data.json",
   "endpoints": {
-    "make": "http://makeapi.mofostaging.net",
-    "login": "http://login.mofostaging.net"
+    "make": "http://makeapi.mofostaging.net"
   },
   "editor": {
     "googlemap": "{{baseDir}}templates/assets/editors/googlemap/googlemap-editor.js",
