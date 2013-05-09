@@ -49,8 +49,8 @@
 
       var data = options.data;
 
-      // If the data being sent is a plain object, convert it to JSON
-      if ( data === Object( data ) ) {
+      // If the data being sent is a plain object and isn't a FormData object, convert it to JSON
+      if ( !( data instanceof FormData ) && data === Object( data ) ) {
         data = JSON.stringify( data );
         xhr.setRequestHeader( "Content-Type", "application/json; charset=utf-8" );
       }
@@ -72,6 +72,17 @@
 
       xhrModule.ajax({
         method: "POST",
+        url: url,
+        header: {
+          "x-csrf-token": __csrfToken
+        },
+        data: data,
+        success: success
+      });
+    },
+    put: function( url, data, success ) {
+      xhrModule.ajax({
+        method: "PUT",
         url: url,
         header: {
           "x-csrf-token": __csrfToken

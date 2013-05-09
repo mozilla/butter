@@ -49,8 +49,8 @@
         _this.setErrorState( "Sorry, but your browser doesn't support this feature." );
       });
 
-      butter.listen( "filetype-unsupported", function invalidType() {
-        _this.setErrorState( "Sorry but that file type isn't supported. Please use JPEG, PNG or GIF." );
+      butter.listen( "droppable-upload-failed", function failedUpload( e ) {
+        _this.setErrorState( e.data );
       });
     }
 

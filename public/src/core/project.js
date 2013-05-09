@@ -32,7 +32,7 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         // Interval for backups, starts first time user clicks Save.
         _backupInterval = -1,
 
-        _thumbnail = "/resources/icons/fb-logo.png";
+        _thumbnail = location.protocol + "//" + location.host + "/resources/icons/fb-logo.png";
 
     function invalidate() {
       // Project is dirty, needs save, backup
