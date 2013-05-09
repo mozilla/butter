@@ -91,14 +91,13 @@
     "knox": "0.7.0",
     "less-middleware": "0.1.9",
     "less": "1.3.3",
+    "makeapi": "0.0.11",
     "nconf": "0.6.7",
     "newrelic": "0.9.20",
     "node-uuid": "1.4.0",
     "requirejs-middleware": "0.0.5",
     "sequelize": "1.5.0",
-    "shelljs": "0.1.2",
-    "habitat": "0.4.2",
-    "makeapi": "0.0.11"
+    "shelljs": "0.1.2"
   },
   "optionalDependencies": {
     "node-statsd": "git://github.com/sivy/node-statsd.git#d6997fff",
