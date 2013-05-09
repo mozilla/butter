@@ -63,7 +63,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
       function( req, res ) {
         Project[ projectMethod ]( { limit: req.params.limit }, function( err, projects ) {
           if ( err ) {
-            res.jsonp( { error: err }, 500 );
+            res.jsonp( 500, { error: err } );
           }
           res.jsonp( { status: 'okay', results: pruneSearchResults( projects ) } );
         });
@@ -77,7 +77,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
     function( req, res ) {
       Project.findRemixes( { id: req.params.id }, function( err, projects ) {
         if ( err ) {
-          res.jsonp( { error: err }, 500 );
+          res.jsonp( 500, { error: err } );
         }
         res.jsonp( { error: 'okay', results: pruneSearchResults( projects ) } );
       });
@@ -89,7 +89,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
 
     Project.find( { email: req.session.email, id: req.params.id }, function( err, doc ) {
       if ( err ) {
-        res.json( { error: err }, 500 );
+        res.json( 500, { error: err } );
         return;
       }
 
@@ -118,7 +118,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
 
     Project.find( { id: req.params.id }, function( err, project ) {
       if ( err ) {
-        res.json( { error: err }, 500 );
+        res.json( 500, { error: err } );
         return;
       }
 
@@ -200,7 +200,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
       Project.update( { email: req.session.email, id: req.body.id, data: projectData },
                       function( err, doc, imagesToDestroy ) {
         if ( err ) {
-          res.json( { error: err }, 500 );
+          res.json( 500, { error: err } );
           return;
         }
 
@@ -229,7 +229,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
 
       Project.create( { email: req.session.email, data: projectData }, function( err, doc ) {
         if ( err ) {
-          res.json( { error: err }, 500 );
+          res.json( 500, { error: err } );
           metrics.increment( 'error.save' );
           return;
         }
