@@ -4,7 +4,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
   return function( butter, options ){
 
     var make = Make({
-      apiURL: "http://makeapi.mofostaging.net"
+      apiURL: butter.config.value( "makeEndpoint" )
     });
 
     options = options || {};
