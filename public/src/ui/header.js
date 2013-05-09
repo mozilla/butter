@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html","text!layouts/tutorial-view.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip", "/external/make-api.js" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, TUTORIAL_VIEW_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip, Make ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html","text!layouts/tutorial-view.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip", "/external/make-api.js", "json!/api/butterconfig" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, TUTORIAL_VIEW_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip, Make, config ) {
 
   return function( butter, options ){
 
@@ -33,7 +33,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
     });
 
     var make = Make({
-      apiURL: butter.config.value( "endpoints" ).make
+      apiURL: config.makeEndpoint
     });
 
     _this.element = _rootElement;

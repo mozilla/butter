@@ -8,6 +8,7 @@ var express = require('express'),
     path = require('path'),
     jade = require('jade'),
     app = express(),
+    habitat = require('habitat'),
     lessMiddleware = require('less-middleware'),
     requirejsMiddleware = require( 'requirejs-middleware' ),
     config = require( './lib/config' ),
@@ -22,7 +23,10 @@ var express = require('express'),
     WWW_ROOT = path.resolve( __dirname, config.dirs.wwwRoot ),
     VALID_TEMPLATES = config.templates;
 
-var templateConfigs = {};
+habitat.load();
+
+var templateConfigs = {},
+    env = new habitat();
 
 function readTemplateConfig( templateName, templatedPath ) {
   var configPath = templatedPath.replace( '{{templateBase}}', config.dirs.templates + '/' );
@@ -388,6 +392,12 @@ app.get( '/healthcheck', routes.api.healthcheck );
 
 app.get( '/external/make-api.js', function( req, res ) {
   res.sendfile( "node_modules/makeapi/public/js/make-api.js" );
+});
+
+app.get( '/api/butterconfig', function( req, res ) {
+  res.json({
+    "makeEndpoint": env.get('MAKE_ENDPOINT')
+  });
 });
 
 app.listen( config.PORT, function() {

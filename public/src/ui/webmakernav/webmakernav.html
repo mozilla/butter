@@ -1,66 +1,15 @@
-<div class="webmaker-nav-container">
-  <div class="webmaker-nav-top">
-    <ul class="webmaker-nav primary">
-      <li><a class="on" data-tab="webmaker">Webmaker</a></li>
-      <li><a data-tab="projects">Projects</a></li>
-      <li><a data-tab="tools">Tools</a></li>
-      <li><a data-tab="events">Events</a></li>
-      <li><a href="#" class="webmaker-feedback-btn">Feedback</a></li>
-    </ul>
-    <ul class="webmaker-nav user-info">
-
-      <li class="login-join">
-        <span class="login">Sign Up</span>
-        <div class="join butter-tooltip">
-          <div class="h3">Log in to Popcorn to save and share your projects</div>
-          <div class="persona-img"></div><div class="info">Popcorn Maker uses <strong>Mozilla Persona</strong>, which puts you in control of your identity with a single email of your choice.</div>
-        </div>
-      </li>
-      <li class="user">
-        <div class="user-name link">
-          <span class="user-name-container"></span>
-          <span class="icon icon-white icon-downtick"></span>
-          <div class="butter-tooltip tooltip-user tooltip-no-hover">
-            <ul>
-              <li><a href="/dashboard" class="my-projects" target="_blank">My Projects</a></li>
-              <li><a class="logout-btn">Logout</a></li>
-            </ul>
+  <div id="webmaker-nav">
+    <nav class="webmaker-nav-container">
+      <ul class="webmaker-nav primary">
+        <li><a>Webmaker</a></li>
+      </ul>
+      <ul class="webmaker-nav user-info">
+        <li class="user">
+          <div class="user-name">
+            <span id="identity" class="user-name-container"></span>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+        <li><iframe id="SSO"></iframe></li>
+      </ul>
+    </nav>
   </div>
-
-  <div class="webmaker-tabs">
-    <div class="webmaker-nav webmaker-tab tab-webmaker">
-      <div class="tab-inner">
-        <img class="logo" src="/resources/webmaker/webmaker-main_01.png" alt="">
-        <div class="h3 webmaker-slogan">Mozilla Webmaker wants to help you make something amazing on the web.</div>
-        <div class="secondary-info">
-          <div class="info">You're using <strong>Popcorn Maker</strong> to remix web video, but Webmaker can also help you learn HTML and CSS, earn badges, create webpages, join meetups in your area, and <a href="http://webmaker.org" target="_blank">other cool stuff</a>.</div>
-        </div>
-      </div>
-    </div>
-    <div class="webmaker-tab tab-projects">
-      <ul class="webmaker-nav tab-inner">
-        <li><a href="https://webmaker.org/projects/" target="_blank">All</a></li>
-        <li><a href="https://webmaker.org/projects/?tool=popcorn" target="_blank">Popcorn Projects</a></li>
-        <li><a href="https://webmaker.org/projects/?tool=thimble" target="_blank">Thimble Projects</a></li>
-      </ul>
-    </div>
-    <div class="webmaker-tab tab-tools">
-      <ul class="webmaker-nav tab-inner">
-        <li><a class="on">Popcorn</a></li>
-        <li><a href="https://thimble.webmaker.org/editor" target="_blank">Thimble</a></li>
-        <li><a href="https://webmaker.org/tools/x-ray-goggles/" target="_blank">X-ray Goggles</a></li>
-      </ul>
-    </div>
-    <div class="webmaker-tab tab-events">
-      <ul class="webmaker-nav tab-inner">
-        <li><a href="https://webmaker.org/events" target="_blank">All Events</a></li>
-        <li><a href="https://webmaker.org/events/search" target="_blank">Search</a></li>
-        <li><a href="https://donate.mozilla.org/page/event/create" target="_blank">Create</a></li>
-      </ul>
-    </div>
-  </div>
-</div>

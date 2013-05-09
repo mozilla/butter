@@ -3,9 +3,6 @@
   "template": "index.html",
   "baseDir": "../../",
   "savedDataUrl": "saved-data.json",
-  "endpoints": {
-    "make": "http://makeapi.mofostaging.net"
-  },
   "editor": {
     "googlemap": "{{baseDir}}templates/assets/editors/googlemap/googlemap-editor.js",
     "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js",
