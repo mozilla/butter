@@ -3,8 +3,10 @@
   "template": "index.html",
   "baseDir": "../../",
   "savedDataUrl": "saved-data.json",
-  "makeEndpoint": "http://makeapi.mofostaging.net",
-  "loginEndpoint": "http://login.mofostaging.net",
+  "endpoints": {
+    "make": "http://makeapi.mofostaging.net",
+    "login": "http://login.mofostaging.net"
+  },
   "editor": {
     "googlemap": "{{baseDir}}templates/assets/editors/googlemap/googlemap-editor.js",
     "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js",

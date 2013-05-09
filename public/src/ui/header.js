@@ -1,11 +1,7 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html","text!layouts/tutorial-view.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip", "http://makeapi.mofostaging.net/js/make-api.js" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, TUTORIAL_VIEW_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip, Make ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html","text!layouts/tutorial-view.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, TUTORIAL_VIEW_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
 
   return function( butter, options ){
-
-    var make = Make({
-      apiURL: butter.config.value( "makeEndpoint" )
-    });
 
     options = options || {};
 
@@ -26,6 +22,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
+        _makeEndpoint = butter.config.value( "endpoints" ).make,
         _toolTip;
 
     // create a tooltip for the plrojectName element
@@ -321,64 +318,71 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
           tutorialUrl = butter.project.remixUrl;
         }
 
-        make.tags( "tutorial:" + tutorialUrl ).then( function( err, results ) {
-          var tutorialView = Lang.domFragment( TUTORIAL_VIEW_TEMPLATE, ".tutorial-view" ),
-              tutorialTemplate = Lang.domFragment( TUTORIAL_LIST_TEMPLATE, ".tutorial-template" ),
-              iframeCover = tutorialView.querySelector( ".tutorial-iframe-cover" ),
-              iframe = tutorialView.querySelector( ".tutorial-iframe" ),
-              closeButton = tutorialView.querySelector( ".tutorial-close-button" ),
-              viewTitle = tutorialView.querySelector( ".tutorial-view-title" ),
-              tutorialList = tutorialTemplate.querySelector( ".tutorial-list" );
+        require( [ _makeEndpoint + "/js/make-api.js" ], function( Make ) {
 
-          if ( err ) {
-            return;
-          }
+          var make = Make({
+            apiURL: _makeEndpoint
+          });
 
-          if ( results.hits.length ) {
+          make.tags( "tutorial:" + tutorialUrl ).then( function( err, results ) {
+            var tutorialView = Lang.domFragment( TUTORIAL_VIEW_TEMPLATE, ".tutorial-view" ),
+                tutorialTemplate = Lang.domFragment( TUTORIAL_LIST_TEMPLATE, ".tutorial-template" ),
+                iframeCover = tutorialView.querySelector( ".tutorial-iframe-cover" ),
+                iframe = tutorialView.querySelector( ".tutorial-iframe" ),
+                closeButton = tutorialView.querySelector( ".tutorial-close-button" ),
+                viewTitle = tutorialView.querySelector( ".tutorial-view-title" ),
+                tutorialList = tutorialTemplate.querySelector( ".tutorial-list" );
 
-            _tutorialButtonContainer.appendChild( tutorialTemplate );
-
-            var onCoverMouseUp = function() {
-              iframeCover.style.display = "none";
-              tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
-            };
-
-            var onCoverMouseDown = function() {
-              iframeCover.style.display = "block";
-              tutorialView.removeEventListener( "mousedown", onCoverMouseDown, false );
-              document.addEventListener( "mouseup", onCoverMouseUp, false );
-            };
-
-            var createTutorialItem = function( item ) {
-              var tutorialElement = document.createElement( "div" );
-              tutorialElement.classList.add( "tutorial-list-item" );
-              tutorialElement.addEventListener( "click", function() {
-                iframe.src = item.url;
-                viewTitle.innerHTML = "Tutorial: " + item.title;
-              tutorialView.classList.remove( "closed" );
-              }, false );
-              tutorialElement.innerHTML = item.title;
-              tutorialList.appendChild( tutorialElement );
-            };
-
-            tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
-
-            closeButton.userSelect = "none";
-            document.body.appendChild( tutorialView );
-
-            closeButton.addEventListener( "click", function() {
-              tutorialView.classList.add( "closed" );
-            }, false );
-
-            $( tutorialView ).draggable({
-              cancel: "iframe"
-            });
-            $( tutorialView ).resizable();
-
-            for ( var i = 0; i < results.hits.length; i++ ) {
-              createTutorialItem( results.hits[ i ] );
+            if ( err ) {
+              return;
             }
-          }
+
+            if ( results.hits.length ) {
+
+              _tutorialButtonContainer.appendChild( tutorialTemplate );
+
+              var onCoverMouseUp = function() {
+                iframeCover.style.display = "none";
+                tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
+              };
+
+              var onCoverMouseDown = function() {
+                iframeCover.style.display = "block";
+                tutorialView.removeEventListener( "mousedown", onCoverMouseDown, false );
+                document.addEventListener( "mouseup", onCoverMouseUp, false );
+              };
+
+              var createTutorialItem = function( item ) {
+                var tutorialElement = document.createElement( "div" );
+                tutorialElement.classList.add( "tutorial-list-item" );
+                tutorialElement.addEventListener( "click", function() {
+                  iframe.src = item.url;
+                  viewTitle.innerHTML = "Tutorial: " + item.title;
+                tutorialView.classList.remove( "closed" );
+                }, false );
+                tutorialElement.innerHTML = item.title;
+                tutorialList.appendChild( tutorialElement );
+              };
+
+              tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
+
+              closeButton.userSelect = "none";
+              document.body.appendChild( tutorialView );
+
+              closeButton.addEventListener( "click", function() {
+                tutorialView.classList.add( "closed" );
+              }, false );
+
+              $( tutorialView ).draggable({
+                cancel: "iframe"
+              });
+              $( tutorialView ).resizable();
+
+              for ( var i = 0; i < results.hits.length; i++ ) {
+                createTutorialItem( results.hits[ i ] );
+              }
+            }
+          });
         });
       }
       if ( butter.project.name ) {
