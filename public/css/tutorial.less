@@ -1,0 +1,87 @@
+.tutorial-list {
+  position: absolute;
+  background: none repeat scroll 0% 0% rgb(58, 60, 60);
+  padding: 0 15px;
+  opacity: 0;
+  transition: opacity .35s;
+  bottom: 100%;
+  overflow: hidden;
+}
+
+.tutorial-list-item {
+  opacity: 0.5;
+}
+
+.tutorial-list-item:hover {
+  opacity: 1;
+}
+
+.butter-tutorial-container:hover .tutorial-list {
+  opacity: 1;
+  position: relative;
+}
+
+#webmaker-nav {
+  position: relative;
+  z-index: 1;
+}
+
+.butter-tutorial-container.hidden {
+  display: none;
+}
+
+.tutorial-view {
+  position: relative;
+  opacity: 1;
+  transition: opacity .35s;
+  top: 0;
+  left: 0;
+  cursor: move;
+  width: 500px;
+  height: 500px;
+  z-index: 100000011;
+  background-color: white;
+  border: 1px solid darken( @baseLightOutline, 10% );
+  box-shadow: 0 3px 10px -5px rgba( 0, 0, 0, 0.5 );
+  padding: 3em 1em 1em;
+}
+
+.tutorial-view.closed {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.tutorial-view-title {
+  position: absolute;
+  top: 1em;
+  color: #555;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.tutorial-iframe-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.tutorial-close-button {
+  position: absolute;
+  cursor: pointer;
+  top: 7px;
+  right: 3px;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.tutorial-iframe {
+  width: 100%;
+  height: 100%;
+  border: 1px solid @baseLightOutline;
+}

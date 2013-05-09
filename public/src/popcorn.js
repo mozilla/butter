@@ -32,7 +32,8 @@ requirejs.config({
     "popcorn.wikipedia": "../templates/assets/plugins/wikipedia/popcorn.wikipedia",
 
     // RequireJS
-    "text": "../external/require/text"
+    "text": "../external/require/text",
+    "json": "../external/require/json"
   },
   // shim config defines dependencies between non-AMD modules, which is all of the Popcorn code
   shim: {

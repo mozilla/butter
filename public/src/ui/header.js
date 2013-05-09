@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts/tutorial-list.html","text!layouts/tutorial-view.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip", "/external/make-api.js", "json!/api/butterconfig" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, TUTORIAL_LIST_TEMPLATE, TUTORIAL_VIEW_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip, Make, config ) {
 
   return function( butter, options ){
 
@@ -10,7 +10,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     var _this = this,
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
+        _tutorialButtonContainer = _rootElement.querySelector( ".butter-tutorial-container" ),
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
@@ -20,10 +20,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
-        _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
-        _webmakerNav,
         _toolTip;
 
     // create a tooltip for the plrojectName element
@@ -34,13 +32,13 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       top: "60px"
     });
 
+    var make = Make({
+      apiURL: config.makeEndpoint
+    });
+
     _this.element = _rootElement;
 
     ToolTip.apply( _projectTitle );
-
-    _tabzilla.addEventListener( "click", function() {
-      document.body.classList.toggle( "tabzilla-open" );
-    }, false );
 
     function saveProject() {
       if ( !butter.cornfield.authenticated() ) {
@@ -209,22 +207,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dialog.open();
     }
 
-    _webmakerNav = new WebmakerBar({
-      container: _webmakerNavBar,
-      onLogin: _userData.authenticationRequired,
-      onLogout: _userData.logout,
-      feedbackCallback: feedbackCallback
-    });
-
-
-    function onLogin() {
-      _webmakerNav.views.login( butter.cornfield.username() );
-    }
-
-    butter.listen( "autologinsucceeded", onLogin, false );
-    butter.listen( "authenticated", onLogin, false );
-    butter.listen( "logout", _webmakerNav.views.logout, false );
-
     function destroyToolTip() {
       if ( _noProjectNameToolTip && !_noProjectNameToolTip.destroyed ) {
         _projectTitle.removeEventListener( "mouseover", destroyToolTip, false );
@@ -331,10 +313,80 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     });
 
     butter.listen( "ready", function() {
+      var tutorialUrl;
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
       }
-    });
 
+      if ( !butter.project.publishUrl &&
+           !butter.project.remixedFromUrl ) {
+        // Happens for a fresh, unsaved project.
+        // No tutorial to load.
+        return;
+      }
+
+      if ( butter.project.publishUrl ) {
+        tutorialUrl = butter.project.publishUrl;
+      } else if ( butter.project.remixedFromUrl ) {
+        tutorialUrl = butter.project.remixedFromUrl;
+      }
+
+      make.tags( "tutorial:" + tutorialUrl ).then( function( err, results ) {
+        var tutorialView = Lang.domFragment( TUTORIAL_VIEW_TEMPLATE, ".tutorial-view" ),
+            tutorialTemplate = Lang.domFragment( TUTORIAL_LIST_TEMPLATE, ".tutorial-template" ),
+            iframeCover = tutorialView.querySelector( ".tutorial-iframe-cover" ),
+            iframe = tutorialView.querySelector( ".tutorial-iframe" ),
+            closeButton = tutorialView.querySelector( ".tutorial-close-button" ),
+            viewTitle = tutorialView.querySelector( ".tutorial-view-title" ),
+            tutorialList = tutorialTemplate.querySelector( ".tutorial-list" );
+
+        if ( err || !results.hits.length) {
+          return;
+        }
+
+        _tutorialButtonContainer.appendChild( tutorialTemplate );
+
+        var onCoverMouseUp = function() {
+          iframeCover.style.display = "none";
+          tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
+        };
+
+        var onCoverMouseDown = function() {
+          iframeCover.style.display = "block";
+          tutorialView.removeEventListener( "mousedown", onCoverMouseDown, false );
+          document.addEventListener( "mouseup", onCoverMouseUp, false );
+        };
+
+        var createTutorialItem = function( item ) {
+          var tutorialElement = document.createElement( "div" );
+          tutorialElement.classList.add( "tutorial-list-item" );
+          tutorialElement.addEventListener( "click", function() {
+            iframe.src = item.url;
+            viewTitle.innerHTML = "Tutorial: " + item.title;
+          tutorialView.classList.remove( "closed" );
+          }, false );
+          tutorialElement.innerHTML = item.title;
+          tutorialList.appendChild( tutorialElement );
+        };
+
+        tutorialView.addEventListener( "mousedown", onCoverMouseDown, false );
+
+        closeButton.userSelect = "none";
+        document.body.appendChild( tutorialView );
+
+        closeButton.addEventListener( "click", function() {
+          tutorialView.classList.add( "closed" );
+        }, false );
+
+        $( tutorialView ).draggable({
+          cancel: "iframe"
+        });
+        $( tutorialView ).resizable();
+
+        for ( var i = 0; i < results.hits.length; i++ ) {
+          createTutorialItem( results.hits[ i ] );
+        }
+      });
+    });
   };
 });
