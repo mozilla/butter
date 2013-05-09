@@ -325,9 +325,9 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "text!layouts
         return;
       }
 
-      if ( butter.project.id >= 0 ) {
+      if ( butter.project.publishUrl ) {
         tutorialUrl = butter.project.publishUrl;
-      } else if ( butter.project.remixedFrom >= 0 ) {
+      } else if ( butter.project.remixedFromUrl ) {
         tutorialUrl = butter.project.remixedFromUrl;
       }
 
