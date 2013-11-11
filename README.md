@@ -3,6 +3,15 @@ Butter
 
 An SDK for authoring Popcorn projects.
 
+# Continuing development
+
+Development has been moved to
+[mozilla/popcorn.webmaker.org](https://github.com/mozilla/popcorn.webmaker.org).
+This repository will continue to exist for historical purposes.
+If you have any patches or issues, please send them to
+[mozilla/popcorn.webmaker.org](https://github.com/mozilla/popcorn.webmaker.org).
+Thanks!
+
 Supported Platforms
 -------------------
 
