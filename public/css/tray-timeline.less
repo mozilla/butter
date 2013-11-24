@@ -281,7 +281,6 @@
 .track-handle {
   border: none;
   border-bottom: 1px solid darken( @baseLight, 25% );
-  cursor: pointer;
   width: 100%;
   height: @_trackHeight;
   background: @baseLight;
@@ -331,6 +330,12 @@
   }
 }
 
+.track-handle:hover{
+  cursor: url(../media/img/hand.png), auto;
+}
+.track-handle:active{
+  cursor: url(../media/img/hand-grab.png), auto;
+}
 .track-handle-icon {
   border: 0 solid darken( @baseLightOutline, 10% );
   box-shadow: inset 0 1px 0 #FFF, 0 1px 0 #FFF;
