@@ -281,10 +281,9 @@
 .track-handle {
   border: none;
   border-bottom: 1px solid darken( @baseLight, 25% );
-  cursor: grab;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
-
+  cursor: url(/media/img/hand.cur), default; /*EI Support*/
+  cursor: -webkit-grab;                      /*Chrome Support*/
+  cursor: -moz-grab;                         /*Mozzila Support*/
   width: 100%;
   height: @_trackHeight;
   background: @baseLight;
