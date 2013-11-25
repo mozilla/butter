@@ -1075,6 +1075,14 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     }
 
     function onElementMouseDown( e ) {
+      //if chrome or firefox 
+      $(".track-handle").css("cursor", "-moz-grabbing");
+      $(".track-handle").css("cursor", "-webkit-grabbing");
+      //if IE, use custom cursor icon
+      if($.browser.msie){
+        $(".track-handle").css({'cursor': 'url(/media/img/hand-grab.cur), default'});
+      }
+
       if ( e.which !== 1 ) {
         return;
       }
@@ -1089,7 +1097,6 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
       window.addEventListener( "mouseup", onElementMouseUp, false );
       window.addEventListener( "mousemove", onElementMouseMove, false );
-
       DragNDrop.dispatch( "sortstarted", e );
     }
 
@@ -1106,6 +1113,13 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         _placeHolder = null;
       }
       DragNDrop.dispatch( "sortstopped" );
+      //if chrome or firefox
+      $(".track-handle").css("cursor", "-moz-grab");
+      $(".track-handle").css("cursor", "-webkit-grab");
+      //if IE, use custom cursor icon
+      if($.browser.msie){
+        $(".track-handle").css({'cursor': 'url(/media/img/hand.cur), default'});
+      }
     }
 
     _instance.addItem = function( item ) {
