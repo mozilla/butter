@@ -1075,6 +1075,9 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     }
 
     function onElementMouseDown( e ) {
+      $(".track-handle").css("cursor", "-moz-grabbing");
+      $(".track-handle").css("cursor", "-webkit-grabbing");
+      $(".track-handle").css("cursor", "grabbing");
       if ( e.which !== 1 ) {
         return;
       }
@@ -1089,7 +1092,6 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
       window.addEventListener( "mouseup", onElementMouseUp, false );
       window.addEventListener( "mousemove", onElementMouseMove, false );
-
       DragNDrop.dispatch( "sortstarted", e );
     }
 
@@ -1106,6 +1108,11 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         _placeHolder = null;
       }
       DragNDrop.dispatch( "sortstopped" );
+      $(".track-handle").css("cursor", "-moz-grab");
+      $(".track-handle").css("cursor", "-webkit-grab");
+      $(".track-handle").css("cursor", "grab");
+      
+      
     }
 
     _instance.addItem = function( item ) {
