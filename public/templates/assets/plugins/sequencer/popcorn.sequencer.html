@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popcorn Subtitle Plug-in Demo</title>
+  <script src="../../../../external/popcorn-js/popcorn.js"></script>
+  <script src="../../../../external/popcorn-js/wrappers/common/popcorn._MediaElementProto.js"></script>
+  <script src="../../../../external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js"></script>
+  <script src="../../../../external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js"></script>
+  <script src="../../../../external/popcorn-js/modules/player/popcorn.player.js"></script>
+  <script src="../../../../external/popcorn-js/players/youtube/popcorn.youtube.js"></script>
+  <script src="popcorn.sequencer.js"></script>
+  <script src="../../../../external/require/require.js"></script>
+  <link href="../../../../css/controls.css" rel="stylesheet">
+  <style>
+    .video {
+      height: 100%;
+      position: relative;
+      width: 100%;
+      z-index: 1;
+      background-color: #FFF;
+    }
+    .controls {
+      background: none repeat scroll 0 0 white;
+      border: 1px solid #D5D6D5;
+      bottom: 0;
+      height: 41px;
+      left: 0;
+      opacity: 1;
+      position: absolute;
+      right: 0;
+      visibility: visible;
+      z-index: 2;
+    }
+  </style>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+      var p = Popcorn.smart( "#video", "#t=,120", { frameAnimation: true } )
+      .volume( 0 )
+      .sequencer({
+        start: 0,
+        end: 90,
+        target: "video",
+        width: 50,
+        zindex: 2,
+        duration: 90,
+        source: "http://www.youtube.com/watch?v=QZB7OFRUrA0"
+      })
+      .sequencer({
+        start: 30,
+        end: 120,
+        target: "video",
+        left: 50,
+        width: 50,
+        zindex: 3,
+        duration: 90,
+        source: "http://www.youtube.com/watch?v=QZB7OFRUrA0"
+      });
+
+      var require = requirejs.config({
+        baseUrl: "../../../../src",
+        paths: {
+          "text": "../external/require/text"
+        }
+      });
+
+      define( "sequencer-example", [ "ui/widget/controls" ], function( Controls ) {
+        p.controls( true );
+        Controls.create( "controls", p );
+      });
+      require(["sequencer-example"]);
+    }, false);
+  </script>
+</head>
+<body>
+  <h1>Popcorn Sequencer Plug-in Demo</h1>
+  <div>
+    <div id="video" style="position: relative; height: 200px; width: 500px;">
+      <div class="video"></div>
+    </div>
+    <div id="controls" class="controls"><div>
+  </div>
+</body>
+</html>
