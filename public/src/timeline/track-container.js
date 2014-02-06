@@ -301,6 +301,13 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
           if ( newStart < _nextEventMin ) {
             newStart = _nextEventMin;
           }
+          // Bug: it doesnt update 'from' status at editor/sequencer-editor.js
+          // When you resize track by left size 'from' of clip is not updated
+          if (trackEvent.popcornOptions.start - newStart > 0 ) sign=sign*(-1);
+          popcornOptions.from = Math.abs(
+            Math.abs(trackEvent.popcornOptions.start  - (trackEventView.element.offsetLeft / _container.clientWidth * _media.duration))
+            + (trackEvent.popcornOptions.from*sign)
+          );
 
           popcornOptions.start = newStart;
         }
