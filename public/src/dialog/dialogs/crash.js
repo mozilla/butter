@@ -22,7 +22,7 @@ define( [ "text!dialog/dialogs/crash.html", "dialog/dialog", "util/lang" ],
 
       var rootElement = dialog.rootElement,
           reportTextArea = rootElement.querySelector( "#report" ),
-          dialogInfo = rootElement.querySelector( ".dialog-info" ),
+          dialogInfo = rootElement.querySelector( ".dialog-hidden" ),
           infoBtn = rootElement.querySelector( ".icon-info-sign" ),
           commentsTextArea = rootElement.querySelector( "#comments" ),
           noBtn = rootElement.querySelector( "#no" ),
