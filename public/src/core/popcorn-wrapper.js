@@ -4,11 +4,11 @@
 /*jshint evil:true*/
 
 define( [
-          "core/logger", "core/eventmanager", "util/uri",
+          "core/logger", "core/eventmanager", "util/uri", "core/metrics",
           "util/warn", "../../external/PluginDetect/PluginDetect_Flash"
         ],
         function(
-          Logger, EventManager, URI,
+          Logger, EventManager, URI, metrics,
           Warn, PluginDetect
         ){
 
@@ -87,12 +87,13 @@ define( [
           popcornId = trackEvent.id,
           popcornEvent = null;
 
-      function createTrackEvent() {
+      function synchronizeTrackEvent() {
 
         if ( _popcorn.getTrackEvent( popcornId ) ) {
           _popcorn[ trackEvent.type ]( popcornId, newOptions );
         } else {
           _popcorn[ trackEvent.type ]( popcornId, options );
+          metrics.increment( "popcorn.plugin." + trackEvent.type );
         }
 
         popcornEvent = _popcorn.getTrackEvent( popcornId );
@@ -129,11 +130,11 @@ define( [
         // make sure the plugin is still included
         if ( _popcorn[ trackEvent.type ] ) {
           if ( trackEvent.type === "sequencer" ) {
-            waitForPopcorn( createTrackEvent, function() {
+            waitForPopcorn( synchronizeTrackEvent, function() {
               throw "Your media seems to be taking a long time to load. Review your media URL(s) or continue waiting.";
             }, findMediaType( trackEvent.popcornOptions.source ) );
           } else {
-            createTrackEvent();
+            synchronizeTrackEvent();
           }
         }
       }

@@ -260,4 +260,60 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
     metrics.increment( 'user.feedback' );
   });
 
+  /**
+   * Proxy metrics from Butter. Each request to post metrics needs
+   * to include a list of one or more metrics, [metric, metric, ...]
+   * where metric is an object with the following structure:
+   *
+   *   [type]:[name]:[value]
+   *
+   * where [type] is a single letter ('i' for increment), [name] is the
+   * name of the stat, and [value] is a value or the empty string if null.
+   *
+   * NOTE: we don't bother with sampleRate, but that could be added.
+   *
+   * In order for a metric to get processed by cornfield, it has to be
+   * whitelisted in the config (see README under `metrics` section).
+   * The whitelist specifies which names, and which operations on those
+   * names (i.e., methods) are permitted.
+   */
+  app.post( '/api/metrics', function( req, res ) {
+    var types = {
+        'i': 'increment',
+        'd': 'decrement',
+        't': 'timing',
+        'g': 'gauge',
+        's': 'set',
+        'u': 'unique'
+      },
+      metricsList = req.body;
+
+    if ( metrics.disabled ) {
+      res.json( { error: 'Disabled' }, 503 );
+      return;
+    }
+
+    metricsList.forEach( function( m ) {
+      // [type]:[name]:[value]
+      var stat = m.split( ':' ),
+          type = types[ stat[ 0 ] ],
+          name = stat[ 1 ],
+          value = stat[ 2 ];
+
+      // Make sure we know about this stat type
+      if ( !type ) {
+        return;
+      }
+
+      // ...and that it has been whitelisted
+      if ( !metrics.isWhitelisted( name, type ) ) {
+        return;
+      }
+
+      metrics[ type ]( name, value );
+    });
+
+    res.json( { status: 'okay' }, 200 );
+  });
+
 };

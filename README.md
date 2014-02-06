@@ -113,6 +113,7 @@ The default server configuration can be found in [lib/default-config.js](lib/def
     - `prefix` *[optional]* prefix to assign to each stat name sent. If not given a default of `<NODE_ENV>.butter.` will be used, for example: pr`oduction.butter`
     - `suffix` *[optional]* suffix to assign to each stat name sent.
     - `globalize` *[optional]* boolean to add `statsd` as an object in the global namespace
+    - `whitelist` a list of names that are allowed, and the methods that can be done on these stats (i.e, timing, increment, decrement, gauge, set, unique). For example: `{ "foo": [ "increment" ],  "bar": [ "increment", "decrement" ] }` indicates that two stats are whitelisted, and the methods that can be applied to each (foo can be incremented, bar can be incremented or decremented). Any metrics sent from the client will be looked up in the whitelist before being processed.
 
   - `publishStore` a `fileStore` used to publish project HTML files (see `fileStore` below for details)
 

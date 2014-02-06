@@ -6,6 +6,10 @@
   "snapshotHTMLOnReady": false,
   "scrapePage": true,
   "backupInterval": 0,
+  "metrics": {
+    "sendInterval": 180000,
+    "sendOnUnload": true
+  },
   "title": "Popcorn Maker",
   "ui": {
     "enabled": true,

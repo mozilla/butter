@@ -62,7 +62,7 @@ window.Butter = {
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
             "util/warn", "text!default-config.json",
-            "ui/widget/tooltip", "crashreporter", "core/project",
+            "ui/widget/tooltip", "crashreporter", "core/project", "core/metrics",
             "../external/ua-parser/ua-parser"
           ],
           function(
@@ -72,7 +72,7 @@ window.Butter = {
             Dialog, Editor, UI,
             xhr, Lang, Tutorial,
             Warn, DEFAULT_CONFIG_JSON,
-            ToolTip, CrashReporter, Project,
+            ToolTip, CrashReporter, Project, metrics,
             UAParser
           ){
 
@@ -881,8 +881,8 @@ window.Butter = {
         if( userConfig ){
           _defaultConfig.override( userConfig );
         }
-
         _config = _defaultConfig;
+
         _defaultTrackeventDuration = _config.value( "trackEvent" ).defaultDuration;
 
         //prepare modules first
@@ -898,6 +898,9 @@ window.Butter = {
           preparePopcornScriptsAndCallbacks( function(){
             preparePage( function(){
               moduleCollection.ready( function(){
+                // We can start collecting/sending metrics now, initialize the module.
+                metrics.init( _this, _config.value( "metrics" ) );
+
                 // We look for an old project backup in localStorage and give the user
                 // a chance to load or discard. If there isn't a backup, we continue
                 // loading as normal.
