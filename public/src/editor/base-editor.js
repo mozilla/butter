@@ -73,8 +73,12 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
      * Closes the editor
      */
     extendObject.close = function() {
-      // Remove the editor's root element from the element to which it was attached
-      extendObject.rootElement.parentNode.removeChild( extendObject.rootElement );
+      // Putthing this in a setTimeout to allow any blur events on elements to finish
+      // before removing these elements.
+      setTimeout( function() {
+        // Remove the editor's root element from the element to which it was attached
+        extendObject.rootElement.parentNode.removeChild( extendObject.rootElement );
+      }, 0 );
 
       // If a close event existed on the events object passed into the constructor, call it
       if ( events.close ) {
