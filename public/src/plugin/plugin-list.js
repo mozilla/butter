@@ -15,10 +15,10 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     var _pluginArchetype = _containerElement.querySelector( ".butter-plugin-tile" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
 
-    Editor.register( "plugin-list", null, function( rootElement, butter ) {
+    Editor.register( "plugin-list", null, function( rootElement, butter, parentElement ) {
       rootElement = _parentElement;
 
-      Editor.BaseEditor.extend( this, butter, rootElement, {
+      Editor.BaseEditor.extend( this, butter, rootElement, parentElement, {
         open: function() {
         },
         close: function() {

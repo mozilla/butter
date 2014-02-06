@@ -52,13 +52,13 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
    * @param {DOMElement} rootElement: The root element to which the editor's content will be attached
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
-  function TrackEventEditor( extendObject, butter, rootElement, events ) {
+  function TrackEventEditor( extendObject, butter, rootElement, parentElement, events ) {
     // Wedge a check for scrollbars into the open event if it exists
     var _oldOpenEvent = events.open,
         _trackEventUpdateErrorCallback = NULL_FUNCTION,
         _trackEvent;
 
-    events.open = function( parentElement, trackEvent ) {
+    events.open = function( trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
           advancedButton = rootElement.querySelector( ".advanced-tab" ),
           basicTab = rootElement.querySelector( ".editor-options" ),
@@ -109,7 +109,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
     };
 
-    BaseEditor.extend( extendObject, butter, rootElement, events );
+    BaseEditor.extend( extendObject, butter, rootElement, parentElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
 

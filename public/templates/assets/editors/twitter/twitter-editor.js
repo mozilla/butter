@@ -5,7 +5,7 @@
 (function( Butter ) {
 
   Butter.Editor.register( "twitter", "load!{{baseDir}}templates/assets/editors/twitter/twitter-editor.html",
-    function( rootElement, butter ) {
+    function( rootElement, butter, parentElement ) {
 
     var _rootElement = rootElement,
         _trackEvent,
@@ -157,8 +157,8 @@
     }
 
     // Extend this object to become a TrackEventEditor
-    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
-      open: function( parentElement, trackEvent ) {
+    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, parentElement, {
+      open: function( trackEvent ) {
         _butter = butter;
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );

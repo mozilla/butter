@@ -7,7 +7,7 @@
   var Editor = Butter.Editor;
 
   Editor.register( "image", "load!{{baseDir}}templates/assets/editors/image/image-editor.html",
-                   function( rootElement, butter, compiledLayout ) {
+                   function( rootElement, butter, parentElement, compiledLayout ) {
 
     var _rootElement = rootElement,
         _tagRadio = _rootElement.querySelector( "#image-tag-radio" ),
@@ -369,8 +369,8 @@
       _this.scrollbar.update();
     }
 
-    Editor.TrackEventEditor.extend( _this, butter, rootElement, {
-      open: function( parentElement, trackEvent ) {
+    Editor.TrackEventEditor.extend( _this, butter, rootElement, parentElement, {
+      open: function( trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions,
             manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options;
 

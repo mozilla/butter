@@ -25,8 +25,8 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/ui-kit.html" ],
       }
     }
 
-  Editor.register( "ui-kit", LAYOUT_SRC, function( rootElement, butter ) {
-    Editor.BaseEditor.extend( this, butter, rootElement, {
+  Editor.register( "ui-kit", LAYOUT_SRC, function( rootElement, butter, parentElement ) {
+    Editor.BaseEditor.extend( this, butter, rootElement, parentElement, {
       open: function() {
         var radios = rootElement.querySelectorAll( ".butter-btn-radio" ),
             checkboxes = rootElement.querySelectorAll( ".butter-btn-checkbox" );
