@@ -11,8 +11,8 @@ var express = require('express'),
     lessMiddleware = require('less-middleware'),
     requirejsMiddleware = require( 'requirejs-middleware' ),
     config = require( './lib/config' ),
-    Project = require( './lib/project' )( config.database ),
-    filter = require( './lib/filter' )( Project.isDBOnline ),
+    Project,
+    filter,
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
     metrics,
@@ -128,6 +128,9 @@ app.configure( function() {
     EMBED_HOSTNAME: config.dirs.embedHostname ? config.dirs.embedHostname : APP_HOSTNAME,
     EMBED_SUFFIX: '_'
   }, stores );
+
+  Project = require( './lib/project' )( config.database, config.makeapi, utils );
+  filter = require( './lib/filter' )( Project.isDBOnline );
 });
 
 require( 'express-persona' )( app, {
