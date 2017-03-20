@@ -61,7 +61,7 @@
       options.hideLoading = function() {
         var bigPlay = document.getElementById( "controls-big-play-button" );
         _this.off( "play", options._surpressPlayEvent );
-        if ( bigPlay ) {
+        if ( bigPlay && !options.playWhenReady ) {
           bigPlay.classList.remove( "hide-button" );
         }
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
