@@ -1,6 +1,26 @@
 <div class="butter-header" data-butter-exclude>
-  <nav id="webmaker-nav"></nav>
-  <a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
+  <div id="webmaker-nav">
+    <nav class="webmaker-nav-container">
+      <ul class="webmaker-nav primary">
+        <li><a>Webmaker</a></li>
+        <li>
+          <a id="butter-tutorial-container">
+            <div class="previous-tutorial-button"></div>
+            <div class="next-tutorial-button"></div>
+            <div class="tutorial-list"></div>
+          </a>
+        </li>
+      </ul>
+      <ul class="webmaker-nav user-info">
+        <li class="user">
+          <div class="user-name">
+            <span id="identity" class="user-name-container"></span>
+          </div>
+        </li>
+        <li><iframe id="SSO"></iframe></li>
+      </ul>
+    </nav>
+  </div>
   <header class="butter-header-primary">
     <div class="butter-logo"></div>
     <ul class="butter-nav">

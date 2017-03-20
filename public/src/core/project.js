@@ -156,6 +156,13 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         enumerable: true
       },
 
+      "remixedFrom": {
+        get: function() {
+          return _remixedFrom;
+        },
+        enumerable: true
+      },
+
       "iframeUrl": {
         get: function() {
           return _iframeUrl;
