@@ -17,6 +17,7 @@ var express = require('express'),
     FileStore = require('./lib/file-store.js'),
     metrics,
     utils,
+    middleware = require( './lib/middleware' ),
     stores = {},
     APP_HOSTNAME = config.hostname,
     WWW_ROOT = path.resolve( __dirname, config.dirs.wwwRoot ),
@@ -112,7 +113,19 @@ app.configure( function() {
       res.header( 'Cache-Control', 'no-store' );
       return next();
     })
-    .use( app.router );
+    .use( app.router )
+    .use( function( err, req, res, next) {
+      if ( !err.status ) {
+        err.status = 500;
+      }
+
+      res.status( err.status );
+      res.render( 'error.jade', { message: err.message, status: err.status });
+    })
+    .use( function( req, res, next ) {
+      res.status( 404 );
+      res.render( 'error.jade', { message: "Not Found", status: 404 });
+    });
 
   // File Store types and options come from JSON config file.
   stores.publish = setupStore( config.publishStore );
@@ -336,13 +349,8 @@ app.post( '/api/publish/:id',
   });
 });
 
-app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
+app.get( '/dashboard', middleware.isAuthenticated, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email;
-
-  if ( !email ) {
-    res.render( 'dashboard-unauthorized.jade' );
-    return;
-  }
 
   Project.findAll( { email: email }, function( err, docs ) {
     var userProjects = [];
