@@ -31,6 +31,9 @@ requirejs.config({
     "popcorn.twitter": "../templates/assets/plugins/twitter/popcorn.twitter",
     "popcorn.wikipedia": "../templates/assets/plugins/wikipedia/popcorn.wikipedia",
 
+    "popcorn.sketchfab": "../templates/assets/plugins/sketchfab/popcorn.sketchfab",
+    "sketchfab-iframe": "../templates/assets/plugins/sketchfab/sketchfab-iframe",
+
     // RequireJS
     "text": "../external/require/text"
   },
@@ -63,7 +66,9 @@ requirejs.config({
     "popcorn.skip": [ "popcorn.core" ],
     "popcorn.text": [ "popcorn.core" ],
     "popcorn.twitter": [ "popcorn.core" ],
-    "popcorn.wikipedia": [ "popcorn.core" ]
+    "popcorn.wikipedia": [ "popcorn.core" ],
+    "sketchfab-iframe": [ "popcorn.core" ],
+    "popcorn.sketchfab": [ "sketchfab-iframe" ]
   }
 });
 
@@ -83,6 +88,7 @@ define([
   "popcorn.text",
   "popcorn.twitter",
   "popcorn.wikipedia",
+  "popcorn.sketchfab",
   "popcorn.HTMLMediaElement",
   "popcorn.HTMLNullVideoElement",
   "popcorn.HTMLSoundCloudAudioElement",
