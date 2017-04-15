@@ -248,6 +248,10 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
     });
   }
 
+  app.get( '/internal/firehose', filter.isStorageAvailable, function( req, res ) {
+    res.render( 'firehose.jade' );
+  });
+
   // Store crash reports
   app.post( '/crash', function( req, res ) {
     storeData( req, res, stores.crash );
