@@ -1,0 +1,151 @@
+/*********************************************************
+* Popcorn Twitter Plugin
+*/
+.popcorn-twitter {
+  position: absolute;
+  text-align: left;
+  color: #555;
+  bottom: 0;
+  width: 35%;
+  height: 100%;
+  background: #FEFEFE;
+  background-clip: padding-box;
+  border: 1px solid #DDD;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.popcorn-twitter-title {
+  display: block;
+  padding: 0 5%;
+  height: 10%;
+  line-height: 2;
+  font-weight: 700;
+  background: #ffffff url("twitter-icon.png") 95% center no-repeat;
+  border-bottom: 1px solid #CCC;
+  box-shadow: 0 2px 4px -2px #dddddd;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.popcorn-twitter-tweets {
+  overflow-y: scroll;
+  height: 90%;
+  line-height: 1.4;
+}
+.popcorn-twitter ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.popcorn-twitter a {
+  text-decoration: none;
+}
+/* Tweet */
+.popcorn-twitter ul > li {
+  padding: 5%;
+  border-bottom: 1px solid #EFEFEF;
+  font-size: 13px;
+}
+.popcorn-twitter-tweet-image {
+  float: left;
+  width: 2.3em;
+  margin-right: 0.5em;
+  border-radius: 3px;
+}
+.popcorn-twitter-tweet-image img {
+  width: 100%;
+}
+.popcorn-twitter-tweet-user {
+  font-weight: 700;
+  overflow: hidden;
+}
+.popcorn-twitter-tweet-user > a {
+  font-weight: 400;
+  color: #28AAE1;
+  display: block;
+}
+.popcorn-twitter-tweet-user > a:hover {
+  text-decoration: underline;
+}
+/*********************************************************
+* Ticker
+*/
+.popcorn-twitter.ticker {
+  position: absolute;
+  top: auto !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  height: 4.8em;
+  text-align: left;
+  color: #F1E79F;
+  font-size: 0.86em;
+  width: 100%;
+  filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#222222', endColorstr='#1a1a1a', GradientType=0);
+  background: -webkit-gradient(linear, top, bottom, color-stop(0%, #222222), color-stop(100%, #1a1a1a));
+  background: -webkit-linear-gradient(top, #222222 0%, #1a1a1a 100%);
+  background: -moz-linear-gradient(top, #222222 0%, #1a1a1a 100%);
+  background: -ms-linear-gradient(top, #222222 0%, #1a1a1a 100%);
+  background: -o-linear-gradient(top, #222222 0%, #1a1a1a 100%);
+  background: linear-gradient(top, #222222);
+  border: none;
+  /* Tweet */
+
+}
+.popcorn-twitter.ticker .popcorn-twitter-title {
+  display: none;
+}
+.popcorn-twitter.ticker .popcorn-twitter-tweets {
+  overflow: hidden;
+  margin-right: 0.8em;
+  background: url("twitter-icon.png") right 10% no-repeat;
+}
+.popcorn-twitter.ticker a {
+  text-decoration: none;
+  font-weight: 300;
+}
+.popcorn-twitter.ticker ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-right: 0.8em;
+}
+.popcorn-twitter.ticker ul > li {
+  height: 4.8em;
+  border: none;
+  padding: 0.8em;
+  font-size: 0.8em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: margin-top 1s ease;
+  -moz-transition: margin-top 1s ease;
+  -o-transition: margin-top 1s ease;
+  -ms-transition: margin-top 1s ease;
+}
+.popcorn-twitter.ticker ul > li > div {
+  padding: 0.3em;
+}
+.popcorn-twitter.ticker .popcorn-twitter-tweet-image {
+  display: none;
+}
+.popcorn-twitter.ticker .popcorn-twitter-tweet-user {
+  font-weight: 700;
+  font-size: 1em;
+}
+.popcorn-twitter.ticker .popcorn-twitter-tweet-user > a {
+  color: inherit;
+  display: inline;
+}
+.popcorn-twitter.ticker .popcorn-twitter-tweet-text {
+  font-size: 0.9em;
+}
+.popcorn-twitter.ticker:hover .popcorn-twitter-tweet-user > a {
+  color: #FFF;
+}
+.twitter-ticker-hidden {
+  display: none;
+}

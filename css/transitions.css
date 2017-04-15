@@ -1,0 +1,134 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
+/*
+*/
+/*********************************************************
+* Base transition styles
+*/
+.popcorn-fade {
+  -webkit-transition: opacity 0.3s ease, visibility 0.3s ease;
+  -moz-transition: opacity 0.3s ease, visibility 0.3s ease;
+  -o-transition: opacity 0.3s ease, visibility 0.3s ease;
+  -ms-transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  visibility: visible;
+  opacity: 1;
+}
+.popcorn-fade.off {
+  visibility: hidden;
+  opacity: 0 !important;
+}
+.popcorn-none {
+  display: block;
+}
+.popcorn-none.off {
+  display: none;
+}
+.popcorn-slide-up {
+  -webkit-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  -moz-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  -o-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  -ms-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  transition: margin-top 0.3s ease, visibility 0.3s ease;
+  visibility: visible;
+  margin-top: 0;
+}
+.popcorn-slide-up.off {
+  visibility: hidden;
+  margin-top: 100% !important;
+}
+.popcorn-slide-down {
+  -webkit-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  -moz-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  -o-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  -ms-transition: margin-top 0.3s ease, visibility 0.3s ease;
+  transition: margin-top 0.3s ease, visibility 0.3s ease;
+  visibility: visible;
+  margin-top: 0;
+}
+.popcorn-slide-down.off {
+  visibility: hidden;
+  margin-top: -100% !important;
+}
+.popcorn-pop {
+  visibility: hidden;
+  -webkit-transform: scale(0, 0);
+  -moz-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  transform: scale(0, 0);
+  -webkit-transform-origin: center;
+  -moz-transform-origin: center;
+  -o-transform-origin: center;
+  -ms-transform-origin: center;
+  transform-origin: center;
+}
+.popcorn-pop.on {
+  visibility: visible;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+  -webkit-animation: pop 0.2s 1 ease-out;
+  -moz-animation: pop 0.2s 1 ease-out;
+  -o-animation: pop 0.2s 1 ease-out;
+  -ms-animation: pop 0.2s 1 ease-out;
+}
+/*********************************************************
+* Keyframe Animations
+*/
+@-webkit-keyframes pop {
+  0% {
+    -webkit-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+  75% {
+    -webkit-transform: scale(1.6, 1.6);
+    transform: scale(1.6, 1.6);
+  }
+  100% {
+    -webkit-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+}
+@-moz-keyframes pop {
+  0% {
+    -moz-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+  75% {
+    -moz-transform: scale(1.6, 1.6);
+    transform: scale(1.6, 1.6);
+  }
+  100% {
+    -moz-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+}
+@-o-keyframes pop {
+  0% {
+    -o-transform: scale(0, 0);
+    transform: scale(0, 0);
+  }
+  75% {
+    -o-transform: scale(1.6, 1.6);
+    transform: scale(1.6, 1.6);
+  }
+  100% {
+    -o-transform: scale(1, 1);
+    transform: scale(1, 1);
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0, 0);
+  }
+  75% {
+    transform: scale(1.6, 1.6);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
