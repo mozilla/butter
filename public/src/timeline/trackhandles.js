@@ -20,7 +20,13 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
         _draggingHandleId;
 
     _addTrackButton.addEventListener( "click", function() {
-      butter.currentMedia.addTrack();
+      var currentMedia = butter.currentMedia,
+          firstTrack = currentMedia.orderedTracks[ 0 ];
+      if ( firstTrack ) {
+        currentMedia.insertTrackBefore( firstTrack );
+      } else {
+        currentMedia.addTrack();
+      }
     }, false );
 
     function sortHandles(){
